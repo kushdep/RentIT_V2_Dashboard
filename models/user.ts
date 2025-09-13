@@ -1,29 +1,30 @@
-import mongoose, { Document, Model, Schema, Types } from "mongoose";
+import mongoose, { Model, Schema, Types } from "mongoose";
 
-export interface IUser extends Document {
-    username:String,
-    email: String,
-    password: String,
-    address:String,
-    primaryPhNo:String,
-    sndryPhNo:String,
-    userImg:{
-        url:String,
-        filename:String
-    },
-    locations:{
-        Categories:{
-            Appartment:String[],
-            Villa:String[],
-            Penthouse:String[]
-        }
-    },
-    savedLoc:Types.ObjectId[],
-    userType:{
-        propertier:boolean
-    },
-    createdAt:Date,
-    updatedAt:Date
+export interface IUser {
+  _id: String;
+  username: String;
+  email: String;
+  password: String;
+  address: String;
+  primaryPhNo: String;
+  sndryPhNo: String;
+  userImg: {
+    url: String;
+    filename: String;
+  };
+  locations: {
+    Categories: {
+      Appartment: String[];
+      Villa: String[];
+      Penthouse: String[];
+    };
+  };
+  savedLoc: Types.ObjectId[];
+  userType: {
+    propertier: boolean;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema: Schema<IUser> = new Schema(
@@ -104,5 +105,5 @@ const UserSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 
-const user:Model<IUser> = mongoose.model<IUser>("User",UserSchema)
-export default user
+const user: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
+export default user;

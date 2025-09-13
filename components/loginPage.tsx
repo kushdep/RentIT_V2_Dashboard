@@ -12,8 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionState } from "react";
-import {submitLogin} from '@/actions/actions'
-import {LoginFormStt} from "@/dataInterfaces"
+import {submitLogin} from '@/actions/formActions'
 
 
 export function LoginForm({
@@ -22,7 +21,8 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [formStt, formAcn, isPending] = useActionState(submitLogin, {
   email:'',
-  password:''
+  password:'',
+  error:''
 });
 
 
@@ -43,6 +43,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="m@example.com"
                   required
                 />
@@ -51,13 +52,13 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" name="password" required />
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isPending}>
                   Login
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" >
                   Login with Google
                 </Button>
               </div>
