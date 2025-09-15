@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { AuthResponse, LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
@@ -22,11 +22,17 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
     }
     const user: IUser = userDoc;
     console.log(user);
-    if(!user.userType.propertier){
-      return{
-        success:false,
-        message:'Not a propertier (Unauthorized)'
-      }
+    if (!user.userType.propertier) {
+      return {
+        success: false,
+        message: "Not a propertier (Unauthorized)",
+      };
+    }
+    if ((user && user.password === undefined) || user.password === null) {
+      return {
+        success: false,
+        message: "Login with Google Credentials",
+      };
     }
     const validPassword = await bcrypt.compare(
       password,
@@ -38,8 +44,22 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
         message: "Email or password incorrect",
       };
     }
-    const token = jwt.sign(
-      { _id: user._id, email },
+
+    return tokenGen(user._id as string,email)
+    
+  } catch (error) {
+    console.log("Error in Login " + error);
+    return {
+      success: false,
+      message: "Error in Login",
+    };
+  }
+}
+
+
+export async function tokenGen(id:string,email:string){
+  const token = jwt.sign(
+      { _id:id, email },
       process.env.JWT_SECRET as string,
       { expiresIn: "7d" }
     );
@@ -49,11 +69,4 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
       message: "Successfully Authenticated",
       token,
     };
-  } catch (error) {
-    console.log("Error in Login " + error);
-    return {
-      success: false,
-      message: "Error in Login",
-    };
-  }
 }

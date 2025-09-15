@@ -1,12 +1,15 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionState } from "react";
 import { AuthResponse, LoginFormStt } from "@/dataInterfaces";
-import { loginBridge } from "@/actions/formActions";
+import { loginBridge } from "@/actions/LoginFormActions";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -17,6 +20,8 @@ export function LoginForm({
     password: "",
     error: "",
   });
+
+  const router = useRouter();
 
   async function submitLogin(
     prevState: LoginFormStt,
@@ -31,6 +36,7 @@ export function LoginForm({
       password === null ||
       password === ""
     ) {
+      toast.error("Invalid Email or Password");
       return {
         ...prevState,
         email: "",
@@ -42,6 +48,7 @@ export function LoginForm({
       (email !== null && email.trim() === "") ||
       (password !== null && password.trim() === "")
     ) {
+      toast.error("Invalid Email or Password");
       return {
         ...prevState,
         email: "",
@@ -53,12 +60,15 @@ export function LoginForm({
     console.log(res);
     if (!res.success) {
       const { message } = res;
+      toast.error(message);
       return {
         email: "",
         password: "",
         error: message,
       };
     }
+    toast.success("Logged In");
+    router.push("/");
     return {
       email: "",
       password: "",
@@ -67,49 +77,60 @@ export function LoginForm({
   }
 
   return (
-    <form
-      action={formFn}
-      className={cn("flex flex-col gap-6", className)}
-      {...props}
-    >
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
-        <p className="text-muted-foreground text-sm text-balance">
-          Enter your email below to login to your account
-        </p>
-      </div>
-      <div className="grid gap-6">
-        <div className="grid gap-3">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Enter your email address"
-            required
-          />
+    <div className={cn("flex flex-col gap-6", className)}>
+      <form
+        action={formFn}
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+      >
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <p className="text-muted-foreground text-sm text-balance">
+            Enter your email below to login to your account
+          </p>
         </div>
-        <div className="grid gap-3">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
+        <div className="grid gap-6">
+          {formStt?.error !== "" && (
+            <p className="text-red-600 text-sm">{formStt.error}</p>
+          )}
+          <div className="grid gap-3">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email address"
+              required
+            />
           </div>
-          <Input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Enter Your password"
-            required
-          />
+          <div className="grid gap-3">
+            <div className="flex items-center">
+              <Label htmlFor="password">Password</Label>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Enter Your password"
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isPending}>
+            Login
+          </Button>
         </div>
-        <Button type="submit" className="w-full" disabled={isPending}>
-          Login
-        </Button>
+      </form>
+      <div className={cn("flex flex-col gap-6", className)}>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => signIn("google")}
+        >
           <svg
             viewBox="-3 0 262 262"
             xmlns="http://www.w3.org/2000/svg"
@@ -144,6 +165,6 @@ export function LoginForm({
           Sign In with Google
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

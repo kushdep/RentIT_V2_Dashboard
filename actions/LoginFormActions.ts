@@ -1,6 +1,6 @@
 "use server";
 
-import { AuthResponse } from "./../dataInterfaces";
+import { AuthResponse } from "../dataInterfaces";
 import { Login } from "@/controllers/authController";
 import { LoginFormStt } from "@/dataInterfaces";
 
@@ -14,3 +14,7 @@ export async function loginBridge(
   });
   return res;
 }
+
+
+
+
