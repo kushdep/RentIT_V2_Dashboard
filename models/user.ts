@@ -1,33 +1,7 @@
+import { IUserIfc } from "@/dataInterfaces";
 import mongoose, { Model, Schema, Types } from "mongoose";
 
-export interface IUser {
-  _id: String;
-  username: String;
-  email: String;
-  password: String;
-  address: String;
-  primaryPhNo: String;
-  sndryPhNo: String;
-  userImg: {
-    url: String;
-    filename: String;
-  };
-  locations: {
-    Categories: {
-      Appartment: String[];
-      Villa: String[];
-      Penthouse: String[];
-    };
-  };
-  savedLoc: Types.ObjectId[];
-  userType: {
-    propertier: boolean;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const UserSchema: Schema<IUser> = new Schema(
+const UserSchema: Schema<IUserIfc> = new Schema(
   {
     username: {
       type: String,
@@ -105,4 +79,4 @@ const UserSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+export default mongoose.models.User || mongoose.model<IUserIfc>("User", UserSchema);
