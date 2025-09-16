@@ -1,6 +1,8 @@
-import { AuthResponse } from './../dataInterfaces';
 import "server-only";
-import {  LoginFormStt } from "../dataInterfaces";
+
+
+import { AuthResponse } from "./../dataInterfaces";
+import { LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User, { IUser } from "../models/user";
@@ -56,29 +58,60 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
   }
 }
 
-export async function tokenGen(id: string, email: string) :Promise<AuthResponse>{
+export async function tokenGen(
+  id: string,
+  email: string
+): Promise<AuthResponse> {
   try {
-    const token = jwt.sign({ _id: id, email }, process.env.JWT_SECRET as string, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { _id: id, email },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "1d",
+      }
+    );
 
-  
     const cookieStore = await cookies();
     cookieStore.set("sessionToken", token, {
       httpOnly: true,
       maxAge: 24 * 3600,
     });
-  
+
     console.log(token);
     return {
       success: true,
       message: "Successfully Authenticated",
     };
   } catch (error) {
-    console.log("Error in Gemerating Token")
+    console.log("Error in Gemerating Token");
     return {
       success: false,
       message: "Error in Gemerating Token",
     };
+  }
+}
+
+export async function LogOut():Promise<AuthResponse> {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("sessionToken");
+  
+    if (sessionCookie !== undefined && sessionCookie !== null) {
+      cookieStore.delete("sessionToken");
+      return {
+        success:true,
+        message:'Logout Sucessfully'
+      }
+    }
+    return {
+      success:false,
+      message:'Unable to Get Token'
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      success:false,
+      message:'Unable to Logout'
+    }
   }
 }

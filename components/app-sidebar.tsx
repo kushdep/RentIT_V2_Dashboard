@@ -32,6 +32,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { SessionProvider } from "next-auth/react"
 
 const data = {
   user: {
@@ -174,7 +175,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
+        <SessionProvider>
         <NavUser user={data.user} />
+        </SessionProvider>
       </SidebarFooter>
     </Sidebar>
   )

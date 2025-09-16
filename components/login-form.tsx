@@ -61,7 +61,6 @@ export function LoginForm({
 
     if(session!==undefined && session!==null){
       signOut()
-      console.log('signed OUT')
     }
 
     const res: AuthResponse = await loginBridge({ email, password });
