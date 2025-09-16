@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+
   const [formStt, formFn, isPending] = useActionState(submitLogin, {
     email: "",
     password: "",
@@ -22,7 +23,6 @@ export function LoginForm({
   });
 
   const router = useRouter();
-
   async function submitLogin(
     prevState: LoginFormStt,
     formData: FormData
@@ -54,6 +54,14 @@ export function LoginForm({
         email: "",
         error: "Invalid Email or Password",
       };
+    }
+
+    const session = await getSession()
+    console.log(session)
+
+    if(session!==undefined && session!==null){
+      signOut()
+      console.log('signed OUT')
     }
 
     const res: AuthResponse = await loginBridge({ email, password });

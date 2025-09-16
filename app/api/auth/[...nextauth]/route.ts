@@ -1,7 +1,7 @@
 "use server";
 
-import { tokenGen } from "@/controllers/authController";
-import User, { IUser } from "@/models/user";
+import { cookies } from "next/headers";
+import User from "@/models/user";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -14,19 +14,26 @@ const handler = NextAuth({
   ],
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60,
   },
   callbacks: {
     async signIn({ user }) {
       if (!user?.email) return false;
 
+      const cookieStore = await cookies();
+      const sessionCookie = cookieStore.get("sessionToken");
+      if (sessionCookie !== undefined && sessionCookie !== null) {
+        cookieStore.delete("sessionToken");
+      }
+
       const userDoc = await User.findOne({ email: user.email });
       if (!userDoc) {
         return false;
       }
-      const exsUser = userDoc as any;
-
-      const res = await tokenGen(exsUser._id as string, user.email);
-      return res.success;
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      return "/dashboard";
     },
   },
 });

@@ -7,7 +7,6 @@ export interface LoginFormStt{
 export interface AuthResponse {
   success: boolean;
   message: string;
-  token?: string;
 }
 
 

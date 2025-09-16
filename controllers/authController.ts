@@ -1,9 +1,10 @@
+import { AuthResponse } from './../dataInterfaces';
 import "server-only";
-
-import { AuthResponse, LoginFormStt } from "../dataInterfaces";
+import {  LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User, { IUser } from "../models/user";
+import { cookies } from "next/headers";
 
 export async function Login(body: LoginFormStt): Promise<AuthResponse> {
   try {
@@ -45,8 +46,7 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
       };
     }
 
-    return tokenGen(user._id as string,email)
-    
+    return await tokenGen(user._id as string, email);
   } catch (error) {
     console.log("Error in Login " + error);
     return {
@@ -56,17 +56,29 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
   }
 }
 
+export async function tokenGen(id: string, email: string) :Promise<AuthResponse>{
+  try {
+    const token = jwt.sign({ _id: id, email }, process.env.JWT_SECRET as string, {
+      expiresIn: "1d",
+    });
 
-export async function tokenGen(id:string,email:string){
-  const token = jwt.sign(
-      { _id:id, email },
-      process.env.JWT_SECRET as string,
-      { expiresIn: "7d" }
-    );
+  
+    const cookieStore = await cookies();
+    cookieStore.set("sessionToken", token, {
+      httpOnly: true,
+      maxAge: 24 * 3600,
+    });
+  
     console.log(token);
     return {
       success: true,
       message: "Successfully Authenticated",
-      token,
     };
+  } catch (error) {
+    console.log("Error in Gemerating Token")
+    return {
+      success: false,
+      message: "Error in Gemerating Token",
+    };
+  }
 }
