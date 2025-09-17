@@ -1,9 +1,6 @@
 import { RentLocIfc } from "@/dataInterfaces"
 import mongoose, { Schema } from "mongoose"
 
-
-
-
 const locSchema:Schema<RentLocIfc> = new Schema({
     Sno:{
         type:Number,

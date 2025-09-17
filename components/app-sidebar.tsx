@@ -44,17 +44,17 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/dashboard",
+      url: "http://localhost:3000/dashboard",
       icon: IconDashboard,
     },
     {
-      title: "My Locations",
-      url: "/dashboard/my-loc",
+      title: "Locations",
+      url: "http://localhost:8080/dashboard/my-loc",
       icon: IconListDetails,
     },
     {
-      title: "Projects",
-      url: "#",
+      title: "Add Location",
+      url: "http://localhost:8080/dashboard/add-loc",
       icon: IconFolder,
     },
     {

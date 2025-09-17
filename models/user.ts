@@ -1,5 +1,5 @@
 import { IUserIfc } from "@/dataInterfaces";
-import mongoose, { Model, Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const UserSchema: Schema<IUserIfc> = new Schema(
   {
