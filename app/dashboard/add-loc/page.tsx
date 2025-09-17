@@ -12,99 +12,97 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 function AddLocPage() {
   return (
-    <div className="w-full grid border border-red-500 p-10">
-      <div className="flex">
-        <div className="">
-          <Label htmlFor="locName" className="">
-            Location Name
-          </Label>
-          <Input id="locName" type="text" name="locName" />
+    <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="locName">Location Name</Label>
+          <Input id="locName" type="text" name="locName" placeholder="Enter location name" />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger className="btn-danger">
-            Location Type
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {locType &&
-              locType.map((l) => (
+
+        <div>
+          <Label>Location Type</Label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                Select Location Type
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {locType?.map((l) => (
                 <DropdownMenuItem key={l.id}>{l.title}</DropdownMenuItem>
               ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
+
       <div className="grid grid-cols-4 gap-4">
-        <div className="">
-          <Label htmlFor="guests" className="">
-            Guests
-          </Label>
+        <div>
+          <Label htmlFor="guests">Guests</Label>
           <Input id="guests" type="number" name="guests" />
         </div>
-        <div className="">
-          <Label htmlFor="bedroom" className="">
-            Bedroom
-          </Label>
+        <div>
+          <Label htmlFor="bedroom">Bedroom</Label>
           <Input id="bedroom" type="number" name="bedroom" />
         </div>
-        <div className="">
-          <Label htmlFor="beds" className="">
-            Beds
-          </Label>
+        <div>
+          <Label htmlFor="beds">Beds</Label>
           <Input id="beds" type="number" name="beds" />
         </div>
-        <div className="">
-          <Label htmlFor="bathroom" className="">
-            Bathroom
-          </Label>
-          <Input id="bathroom" type="text" name="bathroom" />
+        <div>
+          <Label htmlFor="bathroom">Bathroom</Label>
+          <Input id="bathroom" type="number" name="bathroom" />
         </div>
       </div>
+
       <div className="grid grid-cols-3 gap-4">
         <GoogleMapAddsInput />
         <div className="col-span-3">
-          <div className="flex justify-center">
-            <div className="flex items-center my-3 w-1/2">
-              <hr className="flex-grow border-t border-gray-300" />
-              <span className="mx-2 text-gray-500">OR</span>
-              <hr className="flex-grow border-t border-gray-300" />
-            </div>
+          <div className="flex items-center my-3 w-1/2 mx-auto">
+            <hr className="flex-grow border-t border-gray-300" />
+            <span className="mx-2 text-gray-500">OR</span>
+            <hr className="flex-grow border-t border-gray-300" />
           </div>
         </div>
         <div className="col-span-3">
           <AddressLocInput />
         </div>
       </div>
+
       <div>
-        <Label htmlFor="price" className="">
-          Price
-        </Label>
-        <Input id="price" type="number" name="price" />
+        <Label htmlFor="price">Price</Label>
+        <Input id="price" type="number" name="price" placeholder="Enter price per night" />
       </div>
+
       <div className="w-full">
-        <Button>Add Images</Button>
+        <Button variant="secondary" className="w-full">Add Images</Button>
       </div>
+
       <div>
+        <Label>Offered Amenities</Label>
         <DropdownMenu>
-          <DropdownMenuTrigger className="btn-danger">
-            Offered Ammenities
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              Select Amenities
+            </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {Ammentities &&
-              Ammentities.map((a) => (
-                <DropdownMenuItem key={a.id}>{a.title}</DropdownMenuItem>
-              ))}
+          <DropdownMenuContent className="w-56">
+            {Ammentities?.map((a) => (
+              <DropdownMenuItem key={a.id}>{a.title}</DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div>
-        <Label htmlFor="desc" className="">
-          Description
-        </Label>
-        <Textarea />
+        <Label htmlFor="desc">Description</Label>
+        <Textarea id="desc" name="desc" placeholder="Write a short description..." />
       </div>
+
       <Button className="w-full">Submit</Button>
     </div>
   );
