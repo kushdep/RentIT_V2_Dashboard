@@ -13,12 +13,18 @@ function AddressLocInput() {
   return (
     <div>
       <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-2">
+        <div className="col-span-2 flex gap-4">
+            <div className="col-span-1">
           <DropdownMenu>
+            <DropdownMenuTrigger className="btn-danger">
+                IN
+            </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem disabled={true}>IN</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+            </div>
+            <div className="col-span-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="btn-danger">
               Choose Your State
@@ -30,8 +36,10 @@ function AddressLocInput() {
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+            </div>
         </div>
-        <div>
+        <div className="col-span-2">
           <Label htmlFor="postalCode" className="">
             Postal Code
           </Label>

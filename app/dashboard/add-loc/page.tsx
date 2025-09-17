@@ -4,7 +4,7 @@ import AddressLocInput from "@/components/AddressLocInput";
 import GoogleMapAddsInput from "@/components/GoogleMapAddsInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Ammentities, locType } from "@/config";
 import {
@@ -62,8 +62,9 @@ function AddLocPage() {
           <Input id="bathroom" type="text" name="bathroom" />
         </div>
       </div>
-        <div className="grid grid-cols-3 gap-4">
-          <GoogleMapAddsInput />
+      <div className="grid grid-cols-3 gap-4">
+        <GoogleMapAddsInput />
+        <div className="col-span-3">
           <div className="flex justify-center">
             <div className="flex items-center my-3 w-1/2">
               <hr className="flex-grow border-t border-gray-300" />
@@ -71,21 +72,22 @@ function AddLocPage() {
               <hr className="flex-grow border-t border-gray-300" />
             </div>
           </div>
-          <div>
-            <AddressLocInput />
-          </div>
+        </div>
+        <div className="col-span-3">
+          <AddressLocInput />
+        </div>
       </div>
       <div>
         <Label htmlFor="price" className="">
-            Price
-          </Label>
-          <Input id="price" type="number" name="price" />
+          Price
+        </Label>
+        <Input id="price" type="number" name="price" />
       </div>
       <div className="w-full">
         <Button>Add Images</Button>
       </div>
       <div>
-         <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger className="btn-danger">
             Offered Ammenities
           </DropdownMenuTrigger>
@@ -99,10 +101,11 @@ function AddLocPage() {
       </div>
       <div>
         <Label htmlFor="desc" className="">
-            Description
-          </Label>
-          <Textarea />
+          Description
+        </Label>
+        <Textarea />
       </div>
+      <Button className="w-full">Submit</Button>
     </div>
   );
 }
