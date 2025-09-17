@@ -23,22 +23,22 @@ export enum LOC_ENUM {
 
 export type ImgType = {
   url: string;
-  filenmae: string;
+  filename: string;
 };
 
 export type LocPhtsType = {
   title: string;
-  images: [ImgType];
+  images: (ImgType | String)[];
 };
 
 export type LocAmmType = {
-  id: Number;
-  name: string;
+  id?: Number | null;
+  name?: string;
 };
 
 export type LocCoordType = {
-  longitude: Number;
-  latitude: Number;
+  longitude: Number | null;
+  latitude: Number | null;
 };
 
 export type LocAuthorType = {
@@ -47,15 +47,15 @@ export type LocAuthorType = {
 };
 
 export type LocFaciType = {
-  id: string;
+  id: string | null;
   title: string;
-  ammenities: [LocAmmType];
+  ammenities: LocAmmType[];
 };
 
 export type DescDataType = {
-  bedrooms: Number;
-  bathrooms: Number;
-  beds: Number;
+  bedrooms: Number | null;
+  bathrooms: Number | null;
+  beds: Number | null;
   others: string;
 };
 
@@ -68,25 +68,26 @@ export type LocAddsType = {
 
 export type LocDtlType = {
   title: string;
-  imgTtlData: [LocPhtsType];
-  price: Number;
-  guestCap: Number;
+  imgTtlData: LocPhtsType[] ;
+  price: Number | null;
+  guestCap: Number | null;
   desc: DescDataType;
-  facilities: [LocFaciType];
+  facilities: LocFaciType[];
   location: LocAddsType;
-  author: LocAuthorType;
-  reviews: Types.ObjectId[];
+  author?: LocAuthorType;
+  reviews?: Types.ObjectId[];
 };
 
 export interface RentLocIfc {
-  Sno: Number;
-  locType: LOC_ENUM;
+  _id?: Types.ObjectId;
+  Sno?: Number;
+  locType: LOC_ENUM | null;
   locDtl: LocDtlType;
   stars?: Number | 0;
 }
 
 export interface IUserIfc {
-  _id: String;
+  _id: Types.ObjectId;
   username: String;
   email: String;
   password: String;
