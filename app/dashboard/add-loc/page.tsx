@@ -13,8 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRef } from "react";
+import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 
 function AddLocPage() {
+  const imgTtlModalRef = useRef<HTMLDialogElement>(null)
+  const ammModalRef = useRef<HTMLDialogElement>(null)
+
   return (
     <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
       <div className="grid grid-cols-2 gap-4">
@@ -79,9 +84,9 @@ function AddLocPage() {
       </div>
 
       <div className="w-full">
-        <Button variant="secondary" className="w-full">Add Images</Button>
+        <AddImgTtlModal reference={imgTtlModalRef}/>
+        <Button variant="secondary" className="w-full" onClick={()=>{imgTtlModalRef.current?.showModal()}}>Add Images</Button>
       </div>
-
       <div>
         <Label>Offered Amenities</Label>
         <DropdownMenu>
