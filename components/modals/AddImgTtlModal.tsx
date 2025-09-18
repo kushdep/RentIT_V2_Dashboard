@@ -1,5 +1,6 @@
 "use client";
-import { useRef, RefObject } from "react";
+
+import { RefObject, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddImgTtlInputBox from "../AddImgTtlInputBox";
 import { useAddLoc } from "@/context/addLocContext";
@@ -9,26 +10,43 @@ function AddImgTtlModal({
 }: {
   reference: RefObject<HTMLDialogElement> | null;
 }) {
-  const { imgTtlData } = useAddLoc();
+  const { imgTtlData, handleImgTtlStt } = useAddLoc();
+  const [imgInpCnt, setImgInpCnt] = useState(imgTtlData.length);
 
   return (
-    <dialog ref={reference} className="p-4 rounded-md border shadow-lg">
-      <AddImgTtlInputBox ind={1} />
-      <div className="flex justify-center">
-        <div className="w-full max-w-md">
-          {imgTtlData.length < 5 && (
-            <button
-              onClick={() => {}}
-              className="w-full border rounded-md mb-3 flex justify-center items-center py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
-            >
-              Add more
-            </button>
-          )}
+    <>
+      <dialog
+        ref={reference}
+        className="p-6 rounded-xl border shadow-2xl max-w-lg w-full 
+             backdrop:bg-black/40
+             fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        {imgTtlData.map((e, i) => {
+          return <AddImgTtlInputBox key={i} inpBoxInd={i} />;
+        })}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            {imgInpCnt < 5 && (
+              <button
+                onClick={() => {
+                  setImgInpCnt(imgInpCnt + 1);
+                  handleImgTtlStt({ title: "", images: [] }, imgInpCnt + 1);
+                }}
+                className="w-full border rounded-md mb-3 mt-5 flex justify-center items-center py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+              >
+                Add more
+              </button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <Button onClick={() => reference?.current?.close()}>Close</Button>
-    </dialog>
+        <div className="flex justify-end gap-3 mt-4">
+          <Button variant="default" onClick={() => reference?.current?.close()}>
+            Close
+          </Button>
+        </div>
+      </dialog>
+    </>
   );
 }
 

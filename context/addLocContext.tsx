@@ -46,7 +46,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     coordinates: { longitude: null, latitude: null },
   });
   const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([
-    { title: "", images: [""] },
+    { title: "", images: [] },
   ]);
   const [facStt, setFacStt] = useState<LocFaciType[]>([
     { id: null, title: "", ammenities: [{ id: null, name: "" }] },
