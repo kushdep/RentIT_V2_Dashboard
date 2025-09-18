@@ -8,8 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useAddLoc } from "@/context/addLocContext";
 
-function AddressLocInput() {
+function AddressLocInput({
+  setAddStt,
+}: {
+  setAddStt: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const {location,handleLocAddr}=useAddLoc()
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-4 gap-4">
@@ -17,7 +24,9 @@ function AddressLocInput() {
           <Label>Country</Label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full">IN</Button>
+              <Button variant="outline" className="w-full">
+                IN
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem disabled>IN</DropdownMenuItem>
@@ -29,7 +38,9 @@ function AddressLocInput() {
           <Label>State</Label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full">Choose State</Button>
+              <Button variant="outline" className="w-full">
+                Choose State
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="max-h-60 overflow-y-auto">
               {regionalCode?.map((c, i) => (
@@ -67,7 +78,9 @@ function AddressLocInput() {
 
       <div className="flex gap-2">
         <Button variant="default">Validate</Button>
-        <Button variant="outline">Cancel</Button>
+        <Button variant="outline" onClick={() => setAddStt(true)}>
+          Cancel
+        </Button>
       </div>
     </div>
   );

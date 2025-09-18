@@ -74,7 +74,7 @@ export const Ammentities = [
 ]
 
 
-export const locType = [
+export const locationType = [
     {
         id: "A01",
         title: "Appartment"

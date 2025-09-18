@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Ammentities, locType } from "@/config";
+import { Ammentities, locationType } from "@/config";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +17,11 @@ import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
 
 function AddLocForm() {
+  const { title, handleLocTtlVal, locType, handleLocTypeVal } = useAddLoc();
+  const [isGglAdd, setIsGglAdd] = useState<boolean>(true);
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
-  const { imgTtlData, handleImgTtlStt, handleLocTypeVal } = useAddLoc();
-  const [selAmm,setSelAmm] = useState<number|null>(null)
+  const [selAmm, setSelAmm] = useState<number | null>(null);
 
   return (
     <>
@@ -45,7 +46,7 @@ function AddLocForm() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                {locType?.map((l) => (
+                {locationType?.map((l) => (
                   <DropdownMenuItem key={l.id}>{l.title}</DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -72,7 +73,7 @@ function AddLocForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4 border rounded-5 p-5">
           <GoogleMapAddsInput />
           <div className="col-span-3">
             <div className="flex items-center my-3 w-1/2 mx-auto">
@@ -82,7 +83,9 @@ function AddLocForm() {
             </div>
           </div>
           <div className="col-span-3">
-            <AddressLocInput />
+           { isGglAdd?<Button variant="outline" className="w-full" onClick={()=>{
+            setIsGglAdd(false)
+           }}>Add Location</Button>:<AddressLocInput setAddStt={setIsGglAdd}/>}
           </div>
         </div>
 
@@ -110,7 +113,7 @@ function AddLocForm() {
         </div>
         <div>
           <Label>Offered Amenities</Label>
-          <AddAmmModal reference={ammModalRef} selAmmId={selAmm}/>
+          <AddAmmModal reference={ammModalRef} selAmmId={selAmm} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full justify-between">
@@ -119,10 +122,15 @@ function AddLocForm() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               {Ammentities?.map((a) => (
-                <DropdownMenuItem key={a.id} onClick={()=>{
-                  setSelAmm(a.id)
-                  ammModalRef.current?.showModal()
-                }}>{a.title}</DropdownMenuItem>
+                <DropdownMenuItem
+                  key={a.id}
+                  onClick={() => {
+                    setSelAmm(a.id);
+                    ammModalRef.current?.showModal();
+                  }}
+                >
+                  {a.title}
+                </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
