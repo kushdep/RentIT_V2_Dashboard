@@ -48,9 +48,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([
     { title: "", images: [] },
   ]);
-  const [facStt, setFacStt] = useState<LocFaciType[]>([
-    { id: null, title: "", ammenities: [{ id: null, name: "" }] },
-  ]);
+  const [facStt, setFacStt] = useState<LocFaciType[]>([]);
 
   function handleLocTypeVal(val: string) {
     setLocType(val);
@@ -108,7 +106,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     setFacStt((prev) => {
       let updFccStt = [...prev];
       const ind = facStt.findIndex((f) => (f.id as any) === id);
-      if (ind !== null) {
+      if (ind !== -1) {
         if (val.ammenities.length === 0) {
           updFccStt = updFccStt.filter((f) => (f.id as any) === id);
         } else {

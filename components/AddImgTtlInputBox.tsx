@@ -25,7 +25,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
     imgTtlData[inpBoxInd].images as any
   );
   const [title, setTitle] = useState(imgTtlData[inpBoxInd].title);
-  
+
   const [isEdit, setIsEdit] = useState<Boolean>(
     title.length > 0 || resolvedUrls.length > 0 ? true : false
   );
@@ -60,7 +60,13 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
 
   return (
     <>
-      <div className={isEdit?"flex flex-col gap-2 p-2 border rounded-xl my-3 bg-gray-100":"flex flex-col gap-2 p-2 border rounded-xl my-3"}>
+      <div
+        className={
+          isEdit
+            ? "flex flex-col gap-2 p-2 border rounded-xl my-3 bg-gray-100"
+            : "flex flex-col gap-2 p-2 border rounded-xl my-3"
+        }
+      >
         <div className="p-2">
           <div className="flex justify-between items-center">
             <label
@@ -72,18 +78,17 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
             <div>
               <Button
                 className="mx-3 text-sm"
-                variant={isEdit?"default":"outline"}
-                onClick={() =>{
-                  if(!isEdit){
-                    handleImgTtlStt({ title, images: resolvedUrls }, inpBoxInd)
-                    setIsEdit(true)
-                  }else{
-                    setIsEdit(false)
+                variant={isEdit ? "default" : "outline"}
+                onClick={() => {
+                  if (!isEdit) {
+                    handleImgTtlStt({ title, images: resolvedUrls }, inpBoxInd);
+                    setIsEdit(true);
+                  } else {
+                    setIsEdit(false);
                   }
-                }
-                }
+                }}
               >
-                {isEdit?'Edit':'Save'}
+                {isEdit ? "Edit" : "Save"}
               </Button>
               {inpBoxInd > 0 && (
                 <button
@@ -112,7 +117,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
             placeholder="Enter a title"
             required
             value={title}
-            disabled={isEdit?true:false}
+            disabled={isEdit ? true : false}
             onChange={(e) => {
               setTitle(e.target.value);
             }}
@@ -130,6 +135,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
                   />
                   <button
                     type="button"
+                    disabled={isEdit ? true : false}
                     className="absolute -top-2 -right-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
                     onClick={() => {
                       delImgUrl(i);
@@ -144,13 +150,13 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
                   <button
                     type="button"
                     className="w-12 h-12 border rounded flex items-center justify-center hover:bg-gray-100"
-                    disabled={isEdit?true:false}
+                    disabled={isEdit ? true : false}
                   >
                     <input
                       type="file"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       onChange={updateInputImg}
-                      disabled={isEdit?true:false}
+                      disabled={isEdit ? true : false}
                     />
                     <img
                       src="/icons/plus-lg.svg"

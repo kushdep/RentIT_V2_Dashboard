@@ -42,7 +42,16 @@ function AddAmmModal({
                     type="checkbox"
                     id={String(e.id)}
                     checked={isChecked}
-                    onChange={(event) => {}}
+                    onChange={(event) => {
+                      setOptStt((prev) => {
+                        if (!event.target.checked) {
+                          return prev.filter((u) => u.id !== e.id);
+                        }
+                        let updStt = [...prev];
+                        updStt.push({ id: e.id, name: e.name });
+                        return updStt;
+                      });
+                    }}
                     className="peer hidden w-full"
                   />
                   <label
@@ -72,6 +81,16 @@ function AddAmmModal({
           <button
             type="submit"
             className="w-full rounded-lg border border-primary px-4 py-2 font-semibold text-primary hover:bg-primary hover:text-white"
+            onClick={() => {
+              handleFacStt(
+                {
+                  id: selAmmId,
+                  title: ammenityData?.title!,
+                  ammenities: optStt,
+                },
+                selAmmId!
+              );
+            }}
           >
             Done
           </button>
