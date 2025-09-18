@@ -17,12 +17,19 @@ import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
 
 function AddLocForm() {
-  const { title, handleLocTtlVal, locType, handleLocTypeVal } = useAddLoc();
+  const {
+    title,
+    handleLocTtlVal,
+    locType,
+    handleLocTypeVal,
+    location,
+    handleLocAddr,
+  } = useAddLoc();
   const [isGglAdd, setIsGglAdd] = useState<boolean>(true);
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
-
+  console.log(location);
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
@@ -72,23 +79,55 @@ function AddLocForm() {
             <Input id="bathroom" type="number" name="bathroom" />
           </div>
         </div>
-
-        <div className="grid grid-cols-3 gap-4 border rounded-5 p-5">
-          <GoogleMapAddsInput />
-          <div className="col-span-3">
-            <div className="flex items-center my-3 w-1/2 mx-auto">
-              <hr className="flex-grow border-t border-gray-300" />
-              <span className="mx-2 text-gray-500">OR</span>
-              <hr className="flex-grow border-t border-gray-300" />
+        {location?.address !== "" ? (
+          <div>
+            <Textarea
+              id="address"
+              name="address"
+              disabled={!!location.address}
+              value={location.address}
+            />
+            <Button
+              className="my-2"
+              onClick={() =>
+                handleLocAddr({
+                  address: "",
+                  placeId: "",
+                  plusCode: {},
+                  coordinates: { longitude: null, latitude: null },
+                })
+              }
+            >
+              Edit
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-4 border rounded-5 p-5">
+            <GoogleMapAddsInput />
+            <div className="col-span-3">
+              <div className="flex items-center my-3 w-1/2 mx-auto">
+                <hr className="flex-grow border-t border-gray-300" />
+                <span className="mx-2 text-gray-500">OR</span>
+                <hr className="flex-grow border-t border-gray-300" />
+              </div>
+            </div>
+            <div className="col-span-3">
+              {isGglAdd ? (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    setIsGglAdd(false);
+                  }}
+                >
+                  Add Location
+                </Button>
+              ) : (
+                <AddressLocInput setAddStt={setIsGglAdd} />
+              )}
             </div>
           </div>
-          <div className="col-span-3">
-           { isGglAdd?<Button variant="outline" className="w-full" onClick={()=>{
-            setIsGglAdd(false)
-           }}>Add Location</Button>:<AddressLocInput setAddStt={setIsGglAdd}/>}
-          </div>
-        </div>
-
+        )}
         <div>
           <Label htmlFor="price">Price</Label>
           <Input

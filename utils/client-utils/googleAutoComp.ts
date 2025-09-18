@@ -52,7 +52,7 @@ export function loadGoogleScript(
 
     const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${
-      process.env.PLACES_MAP_KEY as string
+      process.env.NEXT_PUBLIC_PLACES_MAP_KEY as string
     }&libraries=places`;
     script.async = true;
     script.defer = true;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getSessionToken, getSuggestions, loadGoogleScript } from "@/utils/client-utils/googleAutoComp";
 
-type predVal = { val: string, index: number }
+type predVal = { val: string, index: number|null }
 
 export function useGoogleAutoComp() {
     const [isLoaded, setIsLoaded] = useState<boolean>(false);

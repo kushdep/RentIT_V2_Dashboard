@@ -62,7 +62,7 @@ export type DescDataType = {
 export type LocAddsType = {
   address: string;
   placeId: string;
-  plusCode: { compound_code?: string; global_code?: string };
+  plusCode: { compound_code?: string; global_code?: string }|undefined;
   coordinates: LocCoordType;
 };
 
