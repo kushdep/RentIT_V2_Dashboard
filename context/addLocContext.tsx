@@ -102,18 +102,20 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }
 
-  function handleFacStt(val: LocFaciType, id: number) {
+  function handleFacStt(val: LocFaciType, id: number, del?: boolean) {
     setFacStt((prev) => {
+      console.log(facStt)
       let updFccStt = [...prev];
       const ind = facStt.findIndex((f) => (f.id as any) === id);
+      console.log(ind)
       if (ind !== -1) {
-        if (val.ammenities.length === 0) {
-          updFccStt = updFccStt.filter((f) => (f.id as any) === id);
+        if (val.ammenities.length === 0 || del) {
+          updFccStt = updFccStt.filter((f) => (f.id as any) !== id);
         } else {
           updFccStt[ind].ammenities = val.ammenities;
         }
       } else {
-        facStt.push(val);
+        updFccStt.push(val);
       }
       return updFccStt;
     });

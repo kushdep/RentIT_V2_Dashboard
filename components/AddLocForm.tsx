@@ -18,43 +18,56 @@ import AddAmmModal from "./modals/AddAmmModal";
 
 function AddLocForm() {
   const {
-    title,
-    handleLocTtlVal,
     locType,
-    handleLocTypeVal,
     location,
+    facilities,
+    handleLocTtlVal,
+    handleLocTypeVal,
     handleLocAddr,
+    handleBathCapVal,
+    handleBedCapVal,
+    handleGstCapVal,
+    handleLocPriceVal,
+    handleBedroomCap,
+    handleLocDesc,
+    handleFacStt,
   } = useAddLoc();
   const [isGglAdd, setIsGglAdd] = useState<boolean>(true);
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
-  console.log(location);
+  console.log(facilities);
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-5 gap-4 w-xl">
+          <div className="col-span-3">
             <Label htmlFor="locName">Location Name</Label>
             <Input
               id="locName"
               type="text"
               name="locName"
+              onChange={(e) => handleLocTtlVal(e.target.value)}
               placeholder="Enter location name"
             />
           </div>
 
-          <div>
+          <div className="col-span-2">
             <Label>Location Type</Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full justify-between">
-                  Select Location Type
+                  {locType === "" ? "Select Location Type" : locType}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 {locationType?.map((l) => (
-                  <DropdownMenuItem key={l.id}>{l.title}</DropdownMenuItem>
+                  <DropdownMenuItem
+                    key={l.id}
+                    onClick={() => handleLocTypeVal(l.title)}
+                  >
+                    {l.title}
+                  </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -64,19 +77,39 @@ function AddLocForm() {
         <div className="grid grid-cols-4 gap-4">
           <div>
             <Label htmlFor="guests">Guests</Label>
-            <Input id="guests" type="number" name="guests" />
+            <Input
+              id="guests"
+              type="number"
+              name="guests"
+              onChange={(e) => handleGstCapVal(Number(e.target.value))}
+            />
           </div>
           <div>
             <Label htmlFor="bedroom">Bedroom</Label>
-            <Input id="bedroom" type="number" name="bedroom" />
+            <Input
+              id="bedroom"
+              type="number"
+              name="bedroom"
+              onChange={(e) => handleBedroomCap(Number(e.target.value))}
+            />
           </div>
           <div>
             <Label htmlFor="beds">Beds</Label>
-            <Input id="beds" type="number" name="beds" />
+            <Input
+              id="beds"
+              type="number"
+              name="beds"
+              onChange={(e) => handleBedCapVal(Number(e.target.value))}
+            />
           </div>
           <div>
             <Label htmlFor="bathroom">Bathroom</Label>
-            <Input id="bathroom" type="number" name="bathroom" />
+            <Input
+              id="bathroom"
+              type="number"
+              name="bathroom"
+              onChange={(e) => handleBathCapVal(Number(e.target.value))}
+            />
           </div>
         </div>
         {location?.address !== "" ? (
@@ -135,6 +168,7 @@ function AddLocForm() {
             type="number"
             name="price"
             placeholder="Enter price per night"
+            onChange={(e) => handleLocPriceVal(Number(e.target.value))}
           />
         </div>
 
@@ -155,7 +189,7 @@ function AddLocForm() {
           <AddAmmModal reference={ammModalRef} selAmmId={selAmm} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
+              <Button variant="outline" className="w-56 justify-between">
                 Select Amenities
               </Button>
             </DropdownMenuTrigger>
@@ -173,6 +207,47 @@ function AddLocForm() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <div className="w-full flex flex-row border my-3 h-25">
+            {facilities.length > 0 ? (
+              facilities.map((e, i) => (
+                <div
+                  key={i}
+                  className="flex flex-row relative p-2"
+                >
+                  <button
+                    className="border border-gray-300 p-1 mt-2 rounded"
+                    onClick={() => {
+                      setSelAmm(e.id);
+                      ammModalRef?.current?.showModal();
+                    }}
+                  >
+                    <img
+                      src={Ammentities[e?.id! - 1]?.options[0]?.img}
+                      className="rounded-none"
+                      style={{
+                        width: 70,
+                        height: 70,
+                        objectFit: "scale-down",
+                      }}
+                    />
+                  </button>
+                  <button
+                    className="absolute top right-[-1px] p-0"
+                    onClick={() => {
+                      console.log("onclick")
+                      handleFacStt(e, e.id!, true);
+                    }}
+                  >
+                    <img src="/icons/x-circle-fill.svg" alt="" />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="p-2">
+                <p className="text-gray-400">No Ammenitites Selected</p>
+              </div>
+            )}
+          </div>
         </div>
 
         <div>
@@ -181,6 +256,7 @@ function AddLocForm() {
             id="desc"
             name="desc"
             placeholder="Write a short description..."
+            onChange={(e) => handleLocDesc(e.target.value)}
           />
         </div>
 
