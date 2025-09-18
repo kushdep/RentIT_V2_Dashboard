@@ -1,7 +1,7 @@
 "use client";
 
 import { LocAddsType, LocFaciType, LocPhtsType } from "@/dataInterfaces";
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type AddLocContextType = {
   locType: string;
@@ -15,33 +15,22 @@ type AddLocContextType = {
   others: string;
   location: LocAddsType;
   facilities: LocFaciType[];
+  handleLocTypeVal: (val: string) => void;
+  handleLocTtlVal: (val: string) => void;
+  handleLocPriceVal: (val: number) => void;
+  handleGstCapVal: (val: number) => void;
+  handleImgTtlStt: (val: LocPhtsType, ind: number, del?: boolean) => void;
+  handleBedroomCap: (val: number) => void;
+  handleBathCapVal: (val: number) => void;
+  handleBedCapVal: (val: number) => void;
+  handleLocDesc: (val: string) => void;
+  handleLocAddr: (val: LocAddsType) => void;
+  handleFacStt: (val: LocFaciType, id: number) => void;
 };
 
-const initval = {
-  locType: "",
-  title: "",
-  price: null,
-  guestCap: null,
-  imgTtlData: [{ title: "", images: [""] as [string] }],
-  bedrooms: null,
-  bathrooms: null,
-  beds: null,
-  others: "",
-  location: {
-    address: "",
-    placeId: "",
-    plusCode: {},
-    coordinates: { longitude: null, latitude: null },
-  },
-  facilities: [{ id: null, title: "", ammenities: [{ id: null, name: "" }] }],
-};
+const AddLocContext = createContext<AddLocContextType | undefined>(undefined);
 
-const addLocContext = createContext<AddLocContextType>(initval);
-export const addLocContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   const [locName, setLocName] = useState("");
   const [locType, setLocType] = useState("");
   const [locDesc, setLocDesc] = useState("");
@@ -157,8 +146,14 @@ export const addLocContextProvider = ({
     handleFacStt,
   };
   return (
-    <addLocContext.Provider value={ctxVal}>{children}</addLocContext.Provider>
+    <AddLocContext.Provider value={ctxVal}>{children}</AddLocContext.Provider>
   );
 };
 
-export const useAddLoc = () => createContext(addLocContext);
+export const useAddLoc = () => {
+  const ctx = useContext(AddLocContext);
+  if (!ctx) {
+    throw new Error("useAddLoc must be used inside AddLocProvider");
+  }
+  return ctx;
+};
