@@ -45,7 +45,7 @@ function AddressLocInput({
   setAddStt: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { handleLocAddr } = useAddLoc();
-  const [selStt,setSelStt] = useState<string>('Choose state')
+  const [selStt, setSelStt] = useState<string>("Choose state");
   const [formState, formAcn, isPending] = useActionState(action, init);
 
   async function action(currentState: FormState, formData: FormData) {
@@ -125,6 +125,7 @@ function AddressLocInput({
       sublocality: subLocality,
     };
   }
+  console.log(selStt);
 
   return (
     <form action={formAcn}>
@@ -152,7 +153,9 @@ function AddressLocInput({
               </DropdownMenuTrigger>
               <DropdownMenuContent className="max-h-60 overflow-y-auto">
                 {regionalCode?.map((c, i) => (
-                  <DropdownMenuItem key={i}>{c.state}</DropdownMenuItem>
+                  <DropdownMenuItem key={i} onClick={() => setSelStt(c.state)}>
+                    {c.state}
+                  </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -188,7 +191,9 @@ function AddressLocInput({
         </div>
 
         <div className="flex gap-2">
-          <Button variant="default">Validate</Button>
+          <Button variant="default" disabled={isPending}>
+            {isPending ? "Validating..." : "Validate"}
+          </Button>
           <Button variant="outline" onClick={() => setAddStt(true)}>
             Cancel
           </Button>
