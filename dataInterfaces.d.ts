@@ -62,13 +62,13 @@ export type DescDataType = {
 export type LocAddsType = {
   address: string;
   placeId: string;
-  plusCode: { compound_code?: string; global_code?: string }|undefined;
+  plusCode: { compound_code?: string; global_code?: string } | undefined;
   coordinates: LocCoordType;
 };
 
 export type LocDtlType = {
   title: string;
-  imgTtlData: LocPhtsType[] ;
+  imgTtlData: LocPhtsType[];
   price: Number | null;
   guestCap: Number | null;
   desc: DescDataType;
@@ -112,3 +112,13 @@ export interface IUserIfc {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type AddressValDataType = {
+  address:{
+    regionCode: string;
+    administrativeArea: string;
+    locality: string;
+    postalCode: string;
+    addressLines: string[];
+  }
+};
