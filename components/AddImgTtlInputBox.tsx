@@ -60,7 +60,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
 
   return (
     <>
-      <div className="flex flex-col gap-2 p-2 border rounded-xl my-3">
+      <div className={isEdit?"flex flex-col gap-2 p-2 border rounded-xl my-3 bg-gray-100":"flex flex-col gap-2 p-2 border rounded-xl my-3"}>
         <div className="p-2">
           <div className="flex justify-between items-center">
             <label
@@ -72,7 +72,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
             <div>
               <Button
                 className="mx-3 text-sm"
-                variant={isEdit?"outline":"default"}
+                variant={isEdit?"default":"outline"}
                 onClick={() =>{
                   if(!isEdit){
                     handleImgTtlStt({ title, images: resolvedUrls }, inpBoxInd)

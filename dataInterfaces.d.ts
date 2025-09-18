@@ -47,7 +47,7 @@ export type LocAuthorType = {
 };
 
 export type LocFaciType = {
-  id: string | null;
+  id: number | null;
   title: string;
   ammenities: LocAmmType[];
 };

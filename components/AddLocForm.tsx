@@ -11,14 +11,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
+import AddAmmModal from "./modals/AddAmmModal";
 
 function AddLocForm() {
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const { imgTtlData, handleImgTtlStt, handleLocTypeVal } = useAddLoc();
+  const [selAmm,setSelAmm] = useState<number|null>(null)
 
   return (
     <>
@@ -108,6 +110,7 @@ function AddLocForm() {
         </div>
         <div>
           <Label>Offered Amenities</Label>
+          <AddAmmModal reference={ammModalRef} selAmmId={selAmm}/>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full justify-between">
@@ -116,7 +119,10 @@ function AddLocForm() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               {Ammentities?.map((a) => (
-                <DropdownMenuItem key={a.id}>{a.title}</DropdownMenuItem>
+                <DropdownMenuItem key={a.id} onClick={()=>{
+                  setSelAmm(a.id)
+                  ammModalRef.current?.showModal()
+                }}>{a.title}</DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
