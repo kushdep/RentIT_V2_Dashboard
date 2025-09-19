@@ -8,7 +8,7 @@ import {
   LocPhtsType,
   RentLocIfc,
 } from "@/dataInterfaces";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -65,6 +65,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([]);
   const [facStt, setFacStt] = useState<LocFaciType[]>([]);
+  const router = useRouter()
 
   function handleLocTypeVal(val: LOC_ENUM) {
     setLocType(val);
@@ -212,11 +213,11 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
         location: locAddr,
       },
     };
-
+    console.log(payload)
     const res = await addLocationAction(payload);
     if (res.success) {
-      toast.error(res.message);
-      window.open(`http://localhost:5173/${res.payload.id}`, "_blank");
+      toast.success(res.message);
+      router.push('/dashboard/my-loc')
     } else {
       toast.error(res.message);
       return;
