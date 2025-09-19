@@ -31,6 +31,8 @@ function AddLocForm() {
     Errors,
     imgTtlErr,
     imgTtlData,
+    handleErrStt,
+    handleImgTtlErr,
     handleLocTtlVal,
     handleLocTypeVal,
     handleLocAddr,
@@ -47,8 +49,10 @@ function AddLocForm() {
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
 
-  function submitAddLocForm() {}
-
+  function submitAddLocForm() {
+    handleErrStt();
+  }
+  console.log(JSON.stringify(Errors));
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
@@ -67,9 +71,7 @@ function AddLocForm() {
               placeholder="Enter location name"
             />
             {Errors?.locName && (
-              <p className="text-xs text-red-600">
-                {Errors["locName"].message}
-              </p>
+              <p className="text-xs text-red-600">{Errors["locName"]}</p>
             )}
           </div>
 
@@ -93,9 +95,7 @@ function AddLocForm() {
               </DropdownMenuContent>
             </DropdownMenu>
             {Errors?.locType && (
-              <p className="text-xs text-red-600">
-                {Errors["locType"].message}
-              </p>
+              <p className="text-xs text-red-600">{Errors["locType"]}</p>
             )}
           </div>
         </div>
@@ -110,7 +110,7 @@ function AddLocForm() {
               onChange={(e) => handleGstCapVal(Number(e.target.value))}
             />
             {Errors?.guests && (
-              <p className="text-xs text-red-600">{Errors["guests"].message}</p>
+              <p className="text-xs text-red-600">{Errors["guests"]}</p>
             )}
           </div>
           <div>
@@ -122,7 +122,7 @@ function AddLocForm() {
               onChange={(e) => handleBedroomCap(Number(e.target.value))}
             />
             {Errors?.rooms && (
-              <p className="text-xs text-red-600">{Errors["rooms"].message}</p>
+              <p className="text-xs text-red-600">{Errors["rooms"]}</p>
             )}
           </div>
           <div>
@@ -134,7 +134,7 @@ function AddLocForm() {
               onChange={(e) => handleBedCapVal(Number(e.target.value))}
             />
             {Errors?.beds && (
-              <p className="text-xs text-red-600">{Errors["beds"].message}</p>
+              <p className="text-xs text-red-600">{Errors["beds"]}</p>
             )}
           </div>
           <div>
@@ -146,7 +146,7 @@ function AddLocForm() {
               onChange={(e) => handleBathCapVal(Number(e.target.value))}
             />
             {Errors?.bathrooms && (
-              <p className="text-xs text-red-600">{Errors["bathrooms"].message}</p>
+              <p className="text-xs text-red-600">{Errors["bathrooms"]}</p>
             )}
           </div>
         </div>
@@ -197,12 +197,12 @@ function AddLocForm() {
                 <AddressLocInput setAddStt={setIsGglAdd} />
               )}
             </div>
+            {Errors?.address && (
+              <p className="text-xs text-red-600">{Errors["address"]}</p>
+            )}
           </div>
         )}
         <div>
-        {Errors?.address && (
-            <p className="text-xs text-red-600">{Errors["address"].message}</p>
-          )}
           <Label htmlFor="price">Price</Label>
           <Input
             id="price"
@@ -211,14 +211,11 @@ function AddLocForm() {
             placeholder="Enter price per night"
             onChange={(e) => handleLocPriceVal(Number(e.target.value))}
           />
-        </div>
           {Errors?.price && (
-            <p className="text-xs text-red-600">{Errors["price"].message}</p>
+            <p className="text-xs text-red-600">{Errors["price"]}</p>
           )}
+        </div>
         <div className="w-full">
-          {imgTtlErr.length > 0 && (
-            <p className="text-xs text-red-600">Add Images of Location</p>
-          )}
           <AddImgTtlModal reference={imgTtlModalRef} />
           <Button
             variant="secondary"
@@ -227,11 +224,14 @@ function AddLocForm() {
               imgTtlModalRef.current?.showModal();
             }}
           >
-            {imgTtlData[0].title !== "" && imgTtlData[0].images.length > 0
+            {imgTtlData.length > 0
               ? "Edit Images"
               : "Add Images"}
           </Button>
-        {imgTtlErr.length>0 && <p className="text-xs text-red-600">Please Add valid images</p>}
+          {(imgTtlData.length>0 && (imgTtlData[0].title === "" ||
+            imgTtlData[0].images.length === 0)) && (
+            <p className="text-xs text-red-600">Please Add valid images</p>
+          )}
         </div>
         <div>
           <Label>Offered Amenities</Label>
@@ -293,8 +293,8 @@ function AddLocForm() {
               </div>
             )}
           </div>
-           {Errors?.facilities && (
-            <p className="text-xs text-red-600">{Errors["facilities"].message}</p>
+          {Errors?.facilities && (
+            <p className="text-xs text-red-600">{Errors["facilities"]}</p>
           )}
         </div>
 
@@ -307,7 +307,7 @@ function AddLocForm() {
             onChange={(e) => handleLocDesc(e.target.value)}
           />
           {Errors?.facilities && (
-            <p className="text-xs text-red-600">{Errors["locDesc"].message}</p>
+            <p className="text-xs text-red-600">{Errors["locDesc"]}</p>
           )}
         </div>
         <Button className="w-full" onClick={submitAddLocForm}>

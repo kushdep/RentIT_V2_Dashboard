@@ -23,7 +23,7 @@ type AddLocContextType = {
   Errors: any;
   imgTtlErr: { index: number; message: string }[];
   handleImgTtlErr: (val: { index: number; message: string }[]) => void;
-  handleErrStt: (val: boolean) => void;
+  handleErrStt: () => void;
   handleLocTypeVal: (val: string) => void;
   handleLocTtlVal: (val: string) => void;
   handleLocPriceVal: (val: number) => void;
@@ -58,9 +58,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     plusCode: {},
     coordinates: { longitude: null, latitude: null },
   });
-  const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([
-    { title: "", images: [] },
-  ]);
+  const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([]);
   const [facStt, setFacStt] = useState<LocFaciType[]>([]);
 
   function handleLocTypeVal(val: string) {
@@ -112,9 +110,6 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
       if (locType === "" || locType === null) {
         errs["locType"] = "Select Location Type";
       }
-      if (locDesc === "" || locDesc === null) {
-        errs["locType"] = "Enter Desciption of Location";
-      }
       if (rentPrice === null || rentPrice < 1) {
         errs["price"] = "Enter Valid Rent Price";
       }
@@ -140,10 +135,8 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
         errs["facilities"] = "Select Atleast two facilities of your Location";
       }
 
-      return {
-        ...prev,
-        ...errs,
-      };
+      console.log(errs)
+      return errs
     });
   }
 

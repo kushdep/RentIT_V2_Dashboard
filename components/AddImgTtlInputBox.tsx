@@ -79,6 +79,7 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
               <Button
                 className="mx-3 text-sm"
                 variant={isEdit ? "default" : "outline"}
+                disabled={title==='' || resolvedUrls.length==0}
                 onClick={() => {
                   if (!isEdit) {
                     handleImgTtlStt({ title, images: resolvedUrls }, inpBoxInd);
@@ -108,7 +109,7 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
             </div>
           </div>
 
-          {<div className="text-red-500 text-xs mt-1">err</div>}
+          {err!==null || err!=='' && <div className="text-red-500 text-xs mt-1">{err}</div>}
 
           <input
             type="text"
@@ -121,7 +122,7 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
             onChange={(e) => {
               setTitle(e.target.value);
             }}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 my-2 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
 
           <div className="my-3">

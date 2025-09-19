@@ -51,13 +51,21 @@ function AddImgTtlModal({
           <div className="w-full max-w-md">
             {imgInpCnt < 5 && (
               <button
+                disabled={
+                  imgTtlData.length > 0
+                    ? imgTtlData[imgTtlData.length - 1].title === "" ||
+                      imgTtlData[imgTtlData.length - 1].images.length === 0
+                      ? true
+                      : false
+                    : false
+                }
                 onClick={() => {
                   setImgInpCnt(imgInpCnt + 1);
                   handleImgTtlStt({ title: "", images: [] }, imgInpCnt + 1);
                 }}
                 className="w-full border rounded-md mb-3 mt-5 flex justify-center items-center py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
               >
-                Add more
+                {imgTtlData.length > 0 ? "Add more" : "Add"}
               </button>
             )}
           </div>
