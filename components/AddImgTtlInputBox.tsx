@@ -91,7 +91,7 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
               >
                 {isEdit ? "Edit" : "Save"}
               </Button>
-              {inpBoxInd > 0 && (
+              {(
                 <button
                   type="button"
                   className="text-gray-600 hover:text-red-600 transition"

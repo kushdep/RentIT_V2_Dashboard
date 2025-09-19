@@ -52,7 +52,7 @@ function AddLocForm() {
   function submitAddLocForm() {
     handleErrStt();
   }
-  console.log(JSON.stringify(Errors));
+console.log(facilities)  
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">

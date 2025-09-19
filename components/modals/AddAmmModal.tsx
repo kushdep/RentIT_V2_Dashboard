@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 import { useAddLoc } from "@/context/addLocContext";
 import { Ammentities } from "@/config";
 import { LocAmmType } from "@/dataInterfaces";
@@ -12,10 +12,15 @@ function AddAmmModal({
   selAmmId: number | null;
   reference: RefObject<HTMLDialogElement> | null;
 }) {
-  const { facilities, handleFacStt } = useAddLoc();
   const ammenityData = Ammentities.find((e) => e.id === selAmmId);
-  const options = facilities.find((f) => f.id === selAmmId)?.ammenities;
-  const [optStt, setOptStt] = useState<LocAmmType[]>(options ?? []);
+
+  const { facilities, handleFacStt } = useAddLoc();
+  const [optStt, setOptStt] = useState<LocAmmType[]>([]);
+  useEffect(() => {
+    const options = facilities.find((f) => f.id === selAmmId)?.ammenities ?? [];
+    setOptStt(options);
+  }, [selAmmId, facilities]);
+
 
   return (
     <>
@@ -47,9 +52,7 @@ function AddAmmModal({
                         if (!event.target.checked) {
                           return prev.filter((u) => u.id !== e.id);
                         }
-                        let updStt = [...prev];
-                        updStt.push({ id: e.id, name: e.name });
-                        return updStt;
+                        return [...prev, { id: e.id, name: e.name }];
                       });
                     }}
                     className="peer hidden w-full"
@@ -58,9 +61,7 @@ function AddAmmModal({
                     htmlFor={String(e.id)}
                     className={`flex w-80 cursor-pointer items-center gap-3 rounded-2xl border p-3 transition
                 ${
-                  isChecked
-                    ? "border-gray-800 bg-gray-400 font-medium"
-                    : "border-gray-300"
+                  isChecked ? "border-gray-800  font-medium" : "border-gray-300"
                 }
                 peer-checked:border-gray-800 peer-checked:bg-gray-100`}
                   >
@@ -80,16 +81,20 @@ function AddAmmModal({
         <form method="dialog" className="mt-6">
           <button
             type="submit"
-            className="w-full rounded-lg border border-primary px-4 py-2 font-semibold text-primary hover:bg-primary hover:text-white"
+            className="w-full rounded-lg border border-primary px-4 py-2 bg-primary text-white"
             onClick={() => {
+              console.log(optStt);
+              const del = optStt.length === 0;
               handleFacStt(
                 {
                   id: selAmmId,
                   title: ammenityData?.title!,
                   ammenities: optStt,
                 },
-                selAmmId!
+                selAmmId!,
+                del
               );
+              if (del) setOptStt([]);
             }}
           >
             Done

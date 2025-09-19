@@ -34,7 +34,7 @@ type AddLocContextType = {
   handleBedCapVal: (val: number) => void;
   handleLocDesc: (val: string) => void;
   handleLocAddr: (val: LocAddsType) => void;
-  handleFacStt: (val: LocFaciType, id: number) => void;
+  handleFacStt: (val: LocFaciType, id: number,del?:boolean) => void;
 };
 
 const AddLocContext = createContext<AddLocContextType | undefined>(undefined);
@@ -135,8 +135,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
         errs["facilities"] = "Select Atleast two facilities of your Location";
       }
 
-      console.log(errs)
-      return errs
+      return errs;
     });
   }
 
@@ -158,18 +157,22 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
 
   function handleFacStt(val: LocFaciType, id: number, del?: boolean) {
     setFacStt((prev) => {
-      console.log(facStt);
       let updFccStt = [...prev];
-      const ind = facStt.findIndex((f) => (f.id as any) === id);
+      const ind = prev.findIndex((f) => (f.id as any) === id);
       console.log(ind);
       if (ind !== -1) {
-        if (val.ammenities.length === 0 || del) {
+        console.log("inside index")
+        if (del) {
+          console.log("inside del");
+          console.log(val.ammenities.length);
           updFccStt = updFccStt.filter((f) => (f.id as any) !== id);
         } else {
           updFccStt[ind].ammenities = val.ammenities;
         }
       } else {
-        updFccStt.push(val);
+        if (val.ammenities.length > 0) {
+          updFccStt.push(val);
+        }
       }
       return updFccStt;
     });
