@@ -20,6 +20,7 @@ export enum LOC_ENUM {
   APPARTMENT_TYPE = "A01",
   VILLA_TYPE = "V01",
   PENTHOUSE_TYPE = "P01",
+  NONE=""
 }
 
 export type ImgType = {

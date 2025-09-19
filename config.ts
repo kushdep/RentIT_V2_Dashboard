@@ -1,3 +1,5 @@
+import { LOC_ENUM } from "./dataInterfaces";
+
 export const Ammentities = [
     {
         id: 1,
@@ -76,15 +78,15 @@ export const Ammentities = [
 
 export const locationType = [
     {
-        id: "A01",
+        id:  LOC_ENUM.APPARTMENT_TYPE,
         title: "Appartment"
     },
     {
-        id: "V01",
+        id: LOC_ENUM.VILLA_TYPE,
         title: "Villa"
     },
     {
-        id: "P01",
+        id: LOC_ENUM.PENTHOUSE_TYPE,
         title: "Penthouse"
     }
 ]

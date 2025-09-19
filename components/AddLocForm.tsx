@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
+import { LOC_ENUM } from "@/dataInterfaces";
 
 function AddLocForm() {
   const {
@@ -32,6 +33,7 @@ function AddLocForm() {
     imgTtlErr,
     imgTtlData,
     handleErrStt,
+    submitAddLoc,
     handleImgTtlErr,
     handleLocTtlVal,
     handleLocTypeVal,
@@ -49,9 +51,7 @@ function AddLocForm() {
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
 
-  function submitAddLocForm() {
-    handleErrStt();
-  }
+
 console.log(facilities)  
   return (
     <>
@@ -80,14 +80,14 @@ console.log(facilities)
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full justify-between">
-                  {locType === "" ? "Select Location Type" : locType}
+                  {locType === LOC_ENUM.NONE ? "Select Location Type" : locType}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 {locationType?.map((l) => (
                   <DropdownMenuItem
                     key={l.id}
-                    onClick={() => handleLocTypeVal(l.title)}
+                    onClick={() => handleLocTypeVal(l.id)}
                   >
                     {l.title}
                   </DropdownMenuItem>
@@ -310,7 +310,7 @@ console.log(facilities)
             <p className="text-xs text-red-600">{Errors["locDesc"]}</p>
           )}
         </div>
-        <Button className="w-full" onClick={submitAddLocForm}>
+        <Button className="w-full" onClick={submitAddLoc}>
           Submit
         </Button>
       </div>
