@@ -19,7 +19,7 @@ function getURLs(file: File): Promise<string> {
   });
 }
 
-function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
+function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) {
   const { imgTtlData, handleImgTtlStt } = useAddLoc();
   const [resolvedUrls, setResolvedUrls] = useState<string[]>(
     imgTtlData[inpBoxInd].images as any
@@ -30,7 +30,7 @@ function AddImgTtlInputBox({ inpBoxInd }: { inpBoxInd: number }) {
     title.length > 0 || resolvedUrls.length > 0 ? true : false
   );
 
-  const [] = useState();
+
 
   async function addImg(file: File) {
     async function resolveUrls() {

@@ -11,7 +11,8 @@ export interface AuthResponse {
   message: string;
 }
 
-export interface Error {
+export interface formValError {
+  title?:string,
   message: string;
 }
 
