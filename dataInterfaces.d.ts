@@ -1,14 +1,15 @@
 import { Types } from "mongoose";
 
 export interface LoginFormStt {
-  email: String;
-  password: String;
-  error?: String;
+  email: string;
+  password: string;
+  error?: string;
 }
 
 export interface AuthResponse {
   success: boolean;
   message: string;
+    payload?:any
 }
 
 export interface formValError {
@@ -25,22 +26,22 @@ export enum LOC_ENUM {
 
 export type ImgType = {
   url: string;
-  filename: string;
+  public_id: string;
 };
 
 export type LocPhtsType = {
   title: string;
-  images: (ImgType | String)[];
+  images: (ImgType | string)[];
 };
 
 export type LocAmmType = {
-  id?: Number | null;
+  id?: number | null;
   name?: string;
 };
 
 export type LocCoordType = {
-  longitude: Number | null;
-  latitude: Number | null;
+  longitude: number | null;
+  latitude: number | null;
 };
 
 export type LocAuthorType = {
@@ -55,9 +56,9 @@ export type LocFaciType = {
 };
 
 export type DescDataType = {
-  bedrooms: Number | null;
-  bathrooms: Number | null;
-  beds: Number | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  beds: number | null;
   others: string;
 };
 
@@ -71,8 +72,8 @@ export type LocAddsType = {
 export type LocDtlType = {
   title: string;
   imgTtlData: LocPhtsType[];
-  price: Number | null;
-  guestCap: Number | null;
+  price: number | null;
+  guestCap: number | null;
   desc: DescDataType;
   facilities: LocFaciType[];
   location: LocAddsType;
@@ -82,29 +83,29 @@ export type LocDtlType = {
 
 export interface RentLocIfc {
   _id?: Types.ObjectId;
-  Sno?: Number;
+  Sno?: number;
   locType: LOC_ENUM | null;
   locDtl: LocDtlType;
-  stars?: Number | 0;
+  stars?: number | 0;
 }
 
 export interface IUserIfc {
   _id: Types.ObjectId;
-  username: String;
-  email: String;
-  password: String;
-  address: String;
-  primaryPhNo: String;
-  sndryPhNo: String;
+  username: string;
+  email: string;
+  password: string;
+  address: string;
+  primaryPhNo: string;
+  sndryPhNo: string;
   userImg: {
-    url: String;
-    filename: String;
+    url: string;
+    filename: string;
   };
   locations: {
     Categories: {
-      Appartment: String[];
-      Villa: String[];
-      Penthouse: String[];
+      Appartment: string[];
+      Villa: string[];
+      Penthouse: string[];
     };
   };
   savedLoc: Types.ObjectId[];

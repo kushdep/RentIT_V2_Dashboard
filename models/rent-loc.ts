@@ -28,7 +28,7 @@ const locSchema:Schema<RentLocIfc> = new Schema({
                         type: String,
                         required: true
                     },
-                    filename: {
+                    public_id: {
                         type: String,
                         required: true
                     }

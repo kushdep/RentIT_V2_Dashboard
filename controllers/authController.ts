@@ -1,17 +1,17 @@
 import "server-only";
 
 
-import { AuthResponse } from "./../dataInterfaces";
+import { AuthResponse, IUserIfc } from "./../dataInterfaces";
 import { LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import User, { IUser } from "../models/user";
+import User from "../models/user";
 import { cookies } from "next/headers";
 
 export async function Login(body: LoginFormStt): Promise<AuthResponse> {
   try {
-    const email = body.email as string;
-    const password = body.password as string;
+    const email = body.email;
+    const password = body.password;
 
     const userDoc = await User.findOne({ email });
 
@@ -23,7 +23,7 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
         message: "User do not exist",
       };
     }
-    const user: IUser = userDoc;
+    const user: IUserIfc = userDoc;
     console.log(user);
     if (!user.userType.propertier) {
       return {
@@ -39,7 +39,7 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
     }
     const validPassword = await bcrypt.compare(
       password,
-      user.password as string
+      user.password
     );
     if (!validPassword) {
       return {
@@ -48,7 +48,7 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
       };
     }
 
-    return await tokenGen(user._id as string, email);
+    return await tokenGen(String(user._id), email);
   } catch (error) {
     console.log("Error in Login " + error);
     return {
@@ -76,8 +76,7 @@ export async function tokenGen(
       httpOnly: true,
       maxAge: 24 * 3600,
     });
-
-    console.log(token);
+    
     return {
       success: true,
       message: "Successfully Authenticated",

@@ -8,7 +8,9 @@ import {
   LocPhtsType,
   RentLocIfc,
 } from "@/dataInterfaces";
+import axios from "axios";
 import React, { createContext, useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 type AddLocContextType = {
   locType: LOC_ENUM;
@@ -37,7 +39,7 @@ type AddLocContextType = {
   handleBedCapVal: (val: number) => void;
   handleLocDesc: (val: string) => void;
   handleLocAddr: (val: LocAddsType) => void;
-  handleFacStt: (val: LocFaciType, id: number,del?:boolean) => void;
+  handleFacStt: (val: LocFaciType, id: number, del?: boolean) => void;
 };
 
 const AddLocContext = createContext<AddLocContextType | undefined>(undefined);
@@ -164,7 +166,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
       const ind = prev.findIndex((f) => (f.id as any) === id);
       console.log(ind);
       if (ind !== -1) {
-        console.log("inside index")
+        console.log("inside index");
         if (del) {
           console.log("inside del");
           console.log(val.ammenities.length);
@@ -182,41 +184,44 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   async function submitAddLoc() {
-  handleErrStt();
+    handleErrStt();
 
-  if (Object.keys(err).length > 0) {
-    console.log("Validation failed", err);
-    return;
-  }
-  if (Object.keys(imgTtlErr).length > 0) {
-    console.log("ImgTtlErr Validation failed", err);
-    return;
-  }
-
-  const payload:RentLocIfc = {
-    locType,
-    locDtl:{
-      title: locName,
-      imgTtlData:imgTtlStt,
-      price: rentPrice,
-      guestCap: gstPlcCp,
-      desc:{ 
-        bedrooms: roomsCap,
-        beds: bedCap,
-        bathrooms: bathCap,
-        others:locDesc
-      },
-      facilities: facStt,
-      location: locAddr,
+    if (Object.keys(err).length > 0) {
+      console.log("Validation failed", err);
+      return;
     }
-  };
+    if (Object.keys(imgTtlErr).length > 0) {
+      console.log("ImgTtlErr Validation failed", err);
+      return;
+    }
 
-  console.log("Submitting payload:", payload);
+    const payload: RentLocIfc = {
+      locType,
+      locDtl: {
+        title: locName,
+        imgTtlData: imgTtlStt,
+        price: rentPrice,
+        guestCap: gstPlcCp,
+        desc: {
+          bedrooms: roomsCap,
+          beds: bedCap,
+          bathrooms: bathCap,
+          others: locDesc,
+        },
+        facilities: facStt,
+        location: locAddr,
+      },
+    };
 
-  await addLocationAction(payload)
-    
-}
-
+    const res = await addLocationAction(payload);
+    if (res.success) {
+      toast.error(res.message);
+      window.open(`http://localhost:5173/${res.payload.id}`, "_blank");
+    } else {
+      toast.error(res.message);
+      return;
+    }
+  }
 
   const ctxVal = {
     locType: locType,
@@ -245,7 +250,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     handleErrStt,
     imgTtlErr,
     handleImgTtlErr,
-    submitAddLoc
+    submitAddLoc,
   };
 
   return (

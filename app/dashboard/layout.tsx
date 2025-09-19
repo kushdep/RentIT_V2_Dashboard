@@ -4,7 +4,6 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import MyLoc from "./my-loc/page"
 
 export default function DashLayout({children}:Readonly<{
   children: React.ReactNode;
