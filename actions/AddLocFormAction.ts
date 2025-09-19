@@ -1,3 +1,5 @@
+'use server'
+
 import { AuthResponse, RentLocIfc } from "@/dataInterfaces";
 import { imageUpload } from "@/utils/server-utils/cloudinary";
 import { RentLocSchema } from "@/zod-validations";
