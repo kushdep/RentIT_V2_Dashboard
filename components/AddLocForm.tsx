@@ -16,7 +16,7 @@ import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
 import { LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
-import { addLocationAction } from "@/actions/AddLocFormAction";
+import { addLocationAction } from "@/actions/LocationAction";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 

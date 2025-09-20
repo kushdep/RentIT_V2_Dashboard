@@ -9,11 +9,11 @@ export interface LoginFormStt {
 export interface AuthResponse {
   success: boolean;
   message: string;
-  payload?:any
+  payload?: any;
 }
 
 export interface formValError {
-  title?:string,
+  title?: string;
   message: string;
 }
 
@@ -21,7 +21,7 @@ export enum LOC_ENUM {
   APPARTMENT_TYPE = "A01",
   VILLA_TYPE = "V01",
   PENTHOUSE_TYPE = "P01",
-  NONE=""
+  NONE = "",
 }
 
 export type ImgType = {
@@ -117,11 +117,18 @@ export interface IUserIfc {
 }
 
 export type AddressValDataType = {
-  address:{
+  address: {
     regionCode: string;
     administrativeArea: string;
     locality: string;
     postalCode: string;
     addressLines: string[];
-  }
+  };
+};
+
+export type JwtTokenVrfType = {
+  _id: string;
+  email: string;
+  iat: number;
+  exp: number;
 };

@@ -1,12 +1,33 @@
 import "server-only";
 
-
-import { AuthResponse, IUserIfc } from "./../dataInterfaces";
+import { AuthResponse, IUserIfc, JwtTokenVrfType } from "./../dataInterfaces";
 import { LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../models/user";
 import { cookies } from "next/headers";
+
+export async function getCookieToken(): Promise<
+  JwtTokenVrfType | null | undefined
+> {
+  try {
+    const cookieStore = await cookies();
+    const token =
+      cookieStore.get("sessionToken")?.value ??
+      cookieStore.get("next-auth.session-token")?.value ??
+      null;
+    if (token === undefined || token === null) {
+      return null;
+    }
+    const decoded = jwt.verify(
+      token!,
+      process.env.JWT_SECRET as string
+    ) as JwtTokenVrfType;
+    return decoded;
+  } catch (error) {
+    console.log("Error in getToken() " + error);
+  }
+}
 
 export async function Login(body: LoginFormStt): Promise<AuthResponse> {
   try {
@@ -37,10 +58,7 @@ export async function Login(body: LoginFormStt): Promise<AuthResponse> {
         message: "Login with Google Credentials",
       };
     }
-    const validPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return {
         success: false,
@@ -76,7 +94,7 @@ export async function tokenGen(
       httpOnly: true,
       maxAge: 24 * 3600,
     });
-    
+
     return {
       success: true,
       message: "Successfully Authenticated",
@@ -90,27 +108,27 @@ export async function tokenGen(
   }
 }
 
-export async function LogOut():Promise<AuthResponse> {
+export async function LogOut(): Promise<AuthResponse> {
   try {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("sessionToken");
-  
+
     if (sessionCookie !== undefined && sessionCookie !== null) {
       cookieStore.delete("sessionToken");
       return {
-        success:true,
-        message:'Logout Sucessfully'
-      }
+        success: true,
+        message: "Logout Sucessfully",
+      };
     }
     return {
-      success:false,
-      message:'Unable to Get Token'
-    }
+      success: false,
+      message: "Unable to Get Token",
+    };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return {
-      success:false,
-      message:'Unable to Logout'
-    }
+      success: false,
+      message: "Unable to Logout",
+    };
   }
 }
