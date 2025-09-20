@@ -34,7 +34,6 @@ const UserSchema: Schema<IUserIfc> = new Schema(
       },
     },
     locations: {
-      categories: {
         Appartment: [
           {
             type: Schema.Types.ObjectId,
@@ -53,7 +52,6 @@ const UserSchema: Schema<IUserIfc> = new Schema(
             ref: "Location",
           },
         ],
-      },
     },
     savedLoc: [
       {
