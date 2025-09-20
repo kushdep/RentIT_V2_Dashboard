@@ -9,7 +9,7 @@ export interface LoginFormStt {
 export interface AuthResponse {
   success: boolean;
   message: string;
-    payload?:any
+  payload?:any
 }
 
 export interface formValError {

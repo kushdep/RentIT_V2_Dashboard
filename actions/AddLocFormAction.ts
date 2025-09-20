@@ -81,7 +81,7 @@ export const addLocationAction = async (
     return {
       success: true,
       message: "Location Added Successfully",
-      payload: locRes._id,
+      payload: locRes._id.toString(),
     };
   } catch (error) {
     console.log("Error in addLocationAction() " + error);

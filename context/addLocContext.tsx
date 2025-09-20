@@ -1,16 +1,12 @@
 "use client";
 
-import { addLocationAction } from "@/actions/AddLocFormAction";
 import {
   LOC_ENUM,
   LocAddsType,
   LocFaciType,
   LocPhtsType,
-  RentLocIfc,
 } from "@/dataInterfaces";
-import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useState } from "react";
-import toast from "react-hot-toast";
 
 type AddLocContextType = {
   locType: LOC_ENUM;
@@ -26,9 +22,10 @@ type AddLocContextType = {
   facilities: LocFaciType[];
   Errors: any;
   imgTtlErr: { index: number; message: string }[];
+  isSubm: boolean;
   handleImgTtlErr: (val: { index: number; message: string }[]) => void;
-  handleErrStt: () => void;
-  submitAddLoc: () => void;
+  handleErrStt: () => object;
+  handleIsSubm: (val: boolean) => void;
   handleLocTypeVal: (val: LOC_ENUM) => void;
   handleLocTtlVal: (val: string) => void;
   handleLocPriceVal: (val: number) => void;
@@ -53,7 +50,8 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   const [bedCap, setBedCap] = useState<number | null>(null);
   const [roomsCap, setBedroomsCap] = useState<number | null>(null);
   const [bathCap, setBathCap] = useState<number | null>(null);
-  const [err, setErr] = useState({});
+  const [err, setErr] = useState<object>({});
+  const [isSubm, setIsSubm] = useState(false);
   const [imgTtlErr, setimgTtlErr] = useState<
     { index: number; message: string }[]
   >([]);
@@ -65,7 +63,6 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const [imgTtlStt, setImgTtlStt] = useState<LocPhtsType[]>([]);
   const [facStt, setFacStt] = useState<LocFaciType[]>([]);
-  const router = useRouter()
 
   function handleLocTypeVal(val: LOC_ENUM) {
     setLocType(val);
@@ -76,27 +73,30 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function handleLocPriceVal(val: number) {
-    setRentPrice(val as any);
+    setRentPrice(val);
   }
 
   function handleGstCapVal(val: number) {
-    setGstPlcCp(val as any);
+    setGstPlcCp(val);
   }
 
   function handleBedCapVal(val: number) {
-    setBedCap(val as any);
+    setBedCap(val);
   }
 
   function handleBedroomCap(val: number) {
-    setBedroomsCap(val as any);
+    setBedroomsCap(val);
   }
 
   function handleBathCapVal(val: number) {
-    setBathCap(val as any);
+    setBathCap(val);
   }
 
   function handleLocDesc(val: string) {
     setLocDesc(val);
+  }
+  function handleIsSubm(val: boolean) {
+    setIsSubm(val);
   }
 
   function handleLocAddr(val: LocAddsType) {
@@ -108,41 +108,43 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function handleErrStt() {
-    setErr((prev) => {
-      let errs: any = {};
-      if (locName.trim() === "" || locName.trim() === null) {
-        errs["locName"] = "Enter Valid Location Name";
-      }
-      if (locType === null) {
-        errs["locType"] = "Select Location Type";
-      }
-      if (rentPrice === null || rentPrice < 1) {
-        errs["price"] = "Enter Valid Rent Price";
-      }
-      if (gstPlcCp === null || gstPlcCp < 1) {
-        errs["guests"] = "Enter Valid Guest Capacity";
-      }
-      if (roomsCap === null || roomsCap < 1) {
-        errs["rooms"] = "Enter Valid Rooms Capacity";
-      }
-      if (bedCap === null || bedCap < 1) {
-        errs["beds"] = "Enter Valid No of Beds";
-      }
-      if (bathCap === null || bathCap < 1) {
-        errs["bathrooms"] = "Enter Valid No of Bathrooms";
-      }
-      if (locAddr.address === "") {
-        errs["address"] = "Enter Address of Your Location";
-      }
-      if (locDesc.trim() === "" || locDesc === null) {
-        errs["locDesc"] = "Enter Desc of Your Location";
-      }
-      if (facStt.length === 0 || facStt[0].id === null) {
-        errs["facilities"] = "Select Atleast two facilities of your Location";
-      }
+    let errs: any = {};
+    if (locName.trim() === "" || locName.trim() === null) {
+      errs["locName"] = "Enter Valid Location Name";
+    }
+    if (locType === null) {
+      errs["locType"] = "Select Location Type";
+    }
+    if (rentPrice === null || rentPrice < 1) {
+      errs["price"] = "Enter Valid Rent Price";
+    }
+    if (gstPlcCp === null || gstPlcCp < 1) {
+      errs["guests"] = "Enter Valid Guest Capacity";
+    }
+    if (roomsCap === null || roomsCap < 1) {
+      errs["rooms"] = "Enter Valid Rooms Capacity";
+    }
+    if (bedCap === null || bedCap < 1) {
+      errs["beds"] = "Enter Valid No of Beds";
+    }
+    if (bathCap === null || bathCap < 1) {
+      errs["bathrooms"] = "Enter Valid No of Bathrooms";
+    }
+    if (locAddr.address === "") {
+      errs["address"] = "Enter Address of Your Location";
+    }
+    if (locDesc.trim() === "" || locDesc === null) {
+      errs["locDesc"] = "Enter Desc of Your Location";
+    }
+    if (facStt.length === 0 || facStt[0].id === null) {
+      errs["facilities"] = "Select Atleast 2 facilities of your Location";
+    }
+    if (imgTtlStt.length < 3) {
+      errs["imgTtl"] = "atleast 3 places image of Location";
+    }
 
-      return errs;
-    });
+    setErr(errs);
+    return errs;
   }
 
   function handleImgTtlStt(val: LocPhtsType, ind: number, del?: boolean) {
@@ -184,46 +186,6 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }
 
-  async function submitAddLoc() {
-    handleErrStt();
-
-    if (Object.keys(err).length > 0) {
-      console.log("Validation failed", err);
-      return;
-    }
-    if (Object.keys(imgTtlErr).length > 0) {
-      console.log("ImgTtlErr Validation failed", err);
-      return;
-    }
-
-    const payload: RentLocIfc = {
-      locType,
-      locDtl: {
-        title: locName,
-        imgTtlData: imgTtlStt,
-        price: rentPrice,
-        guestCap: gstPlcCp,
-        desc: {
-          bedrooms: roomsCap,
-          beds: bedCap,
-          bathrooms: bathCap,
-          others: locDesc,
-        },
-        facilities: facStt,
-        location: locAddr,
-      },
-    };
-    console.log(payload)
-    const res = await addLocationAction(payload);
-    if (res.success) {
-      toast.success(res.message);
-      router.push('/dashboard/my-loc')
-    } else {
-      toast.error(res.message);
-      return;
-    }
-  }
-
   const ctxVal = {
     locType: locType,
     handleLocTypeVal,
@@ -251,7 +213,8 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     handleErrStt,
     imgTtlErr,
     handleImgTtlErr,
-    submitAddLoc,
+    isSubm,
+    handleIsSubm,
   };
 
   return (

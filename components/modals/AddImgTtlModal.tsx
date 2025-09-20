@@ -10,8 +10,7 @@ function AddImgTtlModal({
 }: {
   reference: RefObject<HTMLDialogElement> | null;
 }) {
-  const { imgTtlData, handleImgTtlStt, imgTtlErr, handleImgTtlErr } =
-    useAddLoc();
+  const { imgTtlData, handleImgTtlStt, imgTtlErr, handleImgTtlErr } = useAddLoc();
   const [imgInpCnt, setImgInpCnt] = useState(imgTtlData.length);
 
   function chckFields() {

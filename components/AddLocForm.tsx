@@ -15,26 +15,29 @@ import { useRef, useState } from "react";
 import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
-import { LOC_ENUM } from "@/dataInterfaces";
+import { LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
+import { addLocationAction } from "@/actions/AddLocFormAction";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 function AddLocForm() {
   const {
     locType,
+    title,
     location,
     facilities,
-    title,
+    Errors,
+    imgTtlData,
+    isSubm,
     price,
     guestCap,
-    bedrooms,
     bathrooms,
+    bedrooms,
     beds,
     others,
-    Errors,
     imgTtlErr,
-    imgTtlData,
     handleErrStt,
-    submitAddLoc,
-    handleImgTtlErr,
+    handleIsSubm,
     handleLocTtlVal,
     handleLocTypeVal,
     handleLocAddr,
@@ -50,9 +53,55 @@ function AddLocForm() {
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
+  const router = useRouter();
 
+  async function submitAddLoc() {
+    const err = handleErrStt();
+    console.log(Object.keys(err).length);
+    console.log(Object.keys(imgTtlErr).length);
 
-console.log(facilities)  
+    if (Object.keys(err).length > 0) {
+      console.log("Validation failed", Errors);
+      handleIsSubm(false);
+      return;
+    }
+    if (Object.keys(imgTtlErr).length > 0 || imgTtlData.length < 3) {
+      console.log("ImgTtlErr Validation failed", Errors);
+      toast.error("please add atleast 3 Images your location");
+      handleIsSubm(false);
+      return;
+    }
+
+    const payload: RentLocIfc = {
+      locType,
+      locDtl: {
+        title,
+        imgTtlData,
+        price,
+        guestCap,
+        desc: {
+          bedrooms,
+          beds,
+          bathrooms,
+          others,
+        },
+        facilities,
+        location,
+      },
+    };
+    console.log(payload);
+    const res = await addLocationAction(payload);
+    if (res.success) {
+      toast.success(res.message);
+      router.push("/dashboard/my-loc");
+    } else {
+      toast.error(res.message);
+      handleIsSubm(false);
+      return;
+    }
+  }
+
+  console.log(facilities);
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
@@ -224,14 +273,16 @@ console.log(facilities)
               imgTtlModalRef.current?.showModal();
             }}
           >
-            {imgTtlData.length > 0
-              ? "Edit Images"
-              : "Add Images"}
+            {imgTtlData.length > 0 ? "Edit Images" : "Add Images"}
           </Button>
-          {(imgTtlData.length>0 && (imgTtlData[0].title === "" ||
-            imgTtlData[0].images.length === 0)) && (
-            <p className="text-xs text-red-600">Please Add valid images</p>
-          )}
+          {imgTtlData.length > 0 &&
+            (imgTtlData[0].title === "" ||
+              imgTtlData[0].images.length === 0) && (
+              <p className="text-xs text-red-600">
+                Please Add valid images{" "}
+                {Errors?.imgTtl && `& ${Errors["imgTtl"]}`}{" "}
+              </p>
+            )}
         </div>
         <div>
           <Label>Offered Amenities</Label>
@@ -310,7 +361,14 @@ console.log(facilities)
             <p className="text-xs text-red-600">{Errors["locDesc"]}</p>
           )}
         </div>
-        <Button className="w-full" onClick={submitAddLoc}>
+        <Button
+          className="w-full"
+          disabled={isSubm}
+          onClick={() => {
+            handleIsSubm(true);
+            submitAddLoc();
+          }}
+        >
           Submit
         </Button>
       </div>
