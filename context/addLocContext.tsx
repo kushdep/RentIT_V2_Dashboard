@@ -5,8 +5,9 @@ import {
   LocAddsType,
   LocFaciType,
   LocPhtsType,
+  RentLocIfc,
 } from "@/dataInterfaces";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type AddLocContextType = {
   locType: LOC_ENUM;
@@ -37,11 +38,13 @@ type AddLocContextType = {
   handleLocDesc: (val: string) => void;
   handleLocAddr: (val: LocAddsType) => void;
   handleFacStt: (val: LocFaciType, id: number, del?: boolean) => void;
+  populateLocStt: (val: RentLocIfc) => void;
 };
 
 const AddLocContext = createContext<AddLocContextType | undefined>(undefined);
 
 export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
+  const [id, setLocId] = useState<string | undefined>("");
   const [locName, setLocName] = useState("");
   const [locType, setLocType] = useState<LOC_ENUM>(LOC_ENUM.NONE);
   const [locDesc, setLocDesc] = useState("");
@@ -186,6 +189,20 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }
 
+  function populateLocStt(val: RentLocIfc) {
+    const { locDtl } = val;
+    setLocId(val._id?.toString());
+    setImgTtlStt(locDtl.imgTtlData);
+    setFacStt(locDtl.facilities);
+    setLocAddr(locDtl.location);
+    setBathCap(locDtl.desc.bathrooms);
+    setBedroomsCap(locDtl.desc.bedrooms);
+    setBedCap(locDtl.desc.beds);
+    setLocDesc(locDtl.desc.others);
+    setLocName(locDtl.title);
+    setLocType(val.locType!);
+  }
+
   const ctxVal = {
     locType: locType,
     handleLocTypeVal,
@@ -215,6 +232,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     handleImgTtlErr,
     isSubm,
     handleIsSubm,
+    populateLocStt,
   };
 
   return (

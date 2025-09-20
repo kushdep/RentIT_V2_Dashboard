@@ -10,42 +10,38 @@ import {
   CardFooter,
   CardContent,
 } from "@/components/ui/card";
+import { PropertyCardDataType } from "@/dataInterfaces";
 
-const propertyCard = ({
-  loc,
-}: {
-  loc: {
-    type: string;
-    title: string;
-    image: string;
-    price: number;
-    address: string;
-    reviews: number;
-  };
-}) => {
+const propertyCard = ({ loc }: { loc: PropertyCardDataType }) => {
+  console.log(loc);
+  console.log("image " + loc.image);
+  
   return (
     <div className="relative max-w-md">
-      <div className="relative z-10 h-60 w-full">
+      <div className="relative h-50 w-full">
         <Image
           src={`${loc.image}`}
-          alt="Nike Jordan Air Rev"
+          alt={`${loc.title}`}
           fill
           className="object-cover rounded-xl shadow-lg"
           priority
         />
       </div>
 
-      <Card className="relative -mt-6 z-0 rounded-xl shadow-xl border bg-white">
-        <CardHeader className="mt-3">
-          <CardTitle>Nike Jordan Air Rev</CardTitle>
-          <CardDescription className="flex items-center gap-2">
-            <Badge variant="outline">{loc.type}</Badge>
-            <Badge variant="outline">{loc.reviews}</Badge>
-          </CardDescription>
-          <span className="text-xl font-semibold">$ {loc.price}</span>
+      <Card className="relative -mt-6 rounded-xl shadow-xl bg-white">
+        <CardHeader className="grid-cols-2 gap-4">
+          <div className="">
+            <CardTitle>{loc.title}</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <Badge variant="outline">{loc.type}</Badge>
+              <Badge variant="outline">{loc.reviews} reviews</Badge>
+            </CardDescription>
+          </div>
+          <div className="text-end">
+            <span className="text-xl font-semibold">$ {loc.price}</span>
+          </div>
         </CardHeader>
-
-        <CardContent>
+        <CardContent className=" ">
           <p>{loc.address}</p>
         </CardContent>
 

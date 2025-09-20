@@ -132,3 +132,13 @@ export type JwtTokenVrfType = {
   iat: number;
   exp: number;
 };
+
+export type PropertyCardDataType = {
+  _id:string,
+  type: string;
+  title: string;
+  image: string;
+  price: number;
+  address: string;
+  reviews: number;
+};

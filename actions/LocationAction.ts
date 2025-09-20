@@ -1,6 +1,11 @@
 "use server";
 
-import { AuthResponse, LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
+import {
+  AuthResponse,
+  LOC_ENUM,
+  PropertyCardDataType,
+  RentLocIfc,
+} from "@/dataInterfaces";
 import { imageUpload } from "@/utils/server-utils/cloudinary";
 import { RentLocSchema } from "@/zod-validations";
 import User from "../models/user";
@@ -102,23 +107,47 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
       };
     }
     const { locations } = userDoc;
-    const payload = locations.map((l: any) => {
-    const  loc = l.map((t: any) => {
-        return {
+    console.log(locations);
+    const payload: PropertyCardDataType[] = Object.entries(locations).flatMap(
+      ([key, val]: [string, unknown]) =>
+        val.map((t: any) => ({
+          _id: t._id,
           type: t.locType,
           title: t.locDtl.title,
-          image: t.locDtl.imgTtldata[0].images[0].url,
+          image: t.locDtl.imgTtlData[0].images[0].url,
           price: t.locDtl.price,
           address: t.locDtl.location.address,
-          reviews: t.locDtl.reviews.length,
-        };
-      });
-      return loc;
-    });
+          reviews: t.locDtl?.reviews.length ?? 0,
+        }))
+    );
+
     return {
       success: true,
       message: "User Location fetched",
       payload,
+    };
+  } catch (error) {
+    console.log("Error in getUserLocs() " + error);
+    return {
+      success: false,
+      message: "Something went wrong",
+    };
+  }
+};
+
+export const getLocDetail = async (id: string): Promise<AuthResponse> => {
+  try {
+    const locDoc = await Location.findById(id);
+    if (locDoc === undefined || locDoc === null) {
+      return {
+        success: false,
+        message: "Unable to get location Details",
+      };
+    }
+    return {
+      success: true,
+      message: "Location Details fetched",
+      payload: locDoc,
     };
   } catch (error) {
     console.log("Error in getUserLocs() " + error);
