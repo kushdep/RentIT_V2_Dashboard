@@ -7,7 +7,7 @@ import {
   LocPhtsType,
   RentLocIfc,
 } from "@/dataInterfaces";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type AddLocContextType = {
   locType: LOC_ENUM;
@@ -55,9 +55,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   const [bathCap, setBathCap] = useState<number | null>(null);
   const [err, setErr] = useState<object>({});
   const [isSubm, setIsSubm] = useState(false);
-  const [imgTtlErr, setimgTtlErr] = useState<
-    { index: number; message: string }[]
-  >([]);
+  const [imgTtlErr, setimgTtlErr] = useState<{ index: number; message: string }[]>([]);
   const [locAddr, setLocAddr] = useState<LocAddsType>({
     address: "",
     placeId: "",
@@ -201,6 +199,8 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     setLocDesc(locDtl.desc.others);
     setLocName(locDtl.title);
     setLocType(val.locType!);
+    setRentPrice(locDtl.price)
+    setGstPlcCp(locDtl.guestCap)
   }
 
   const ctxVal = {

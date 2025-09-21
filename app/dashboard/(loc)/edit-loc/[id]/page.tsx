@@ -1,12 +1,9 @@
-"use client";
-
-import EditLocForm from "@/components/EditLocForm";
-import { AddLocProvider } from "@/context/addLocContext";
+import AddLocForm from "@/components/AddLocForm";
 
 function EditLocPage() {
   return (
     <>
-      <EditLocForm />
+      <AddLocForm />
     </>
   );
 }

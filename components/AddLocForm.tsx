@@ -1,3 +1,5 @@
+"use client";
+
 import AddressLocInput from "@/components/AddressLocInput";
 import GoogleMapAddsInput from "@/components/GoogleMapAddsInput";
 import { Button } from "@/components/ui/button";
@@ -11,14 +13,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
 import { LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
-import { addLocationAction } from "@/actions/LocationAction";
+import { addLocationAction, getLocDetail } from "@/actions/LocationAction";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 function AddLocForm() {
   const {
@@ -48,18 +50,18 @@ function AddLocForm() {
     handleBedroomCap,
     handleLocDesc,
     handleFacStt,
+    populateLocStt,
   } = useAddLoc();
   const [isGglAdd, setIsGglAdd] = useState<boolean>(true);
   const imgTtlModalRef = useRef<HTMLDialogElement>(null);
   const ammModalRef = useRef<HTMLDialogElement>(null);
   const [selAmm, setSelAmm] = useState<number | null>(null);
   const router = useRouter();
+  const path = usePathname();
+  const params = useParams();
 
   async function submitAddLoc() {
     const err = handleErrStt();
-    console.log(Object.keys(err).length);
-    console.log(Object.keys(imgTtlErr).length);
-
     if (Object.keys(err).length > 0) {
       console.log("Validation failed", Errors);
       handleIsSubm(false);
@@ -101,7 +103,25 @@ function AddLocForm() {
     }
   }
 
-  console.log(facilities);
+  useEffect(() => {
+    console.log('Inside useEffect')
+    async function updEditLocStt() {
+      const { id } = params;
+      console.log(id)
+      const res = await getLocDetail(id as string);
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+      const data = JSON.parse(res.payload)
+      populateLocStt(data);
+    }
+
+    if (path.includes("/edit-loc")) {
+        console.log(path)
+      updEditLocStt();
+    }
+  }, []);
   return (
     <>
       <div className="w-full max-w-7xl mx-auto grid gap-6 p-10">
@@ -112,6 +132,7 @@ function AddLocForm() {
               id="locName"
               type="text"
               name="locName"
+              value={title}
               onChange={(e) => {
                 if (e.target.value.trim() !== "") {
                   handleLocTtlVal(e.target.value);
@@ -155,6 +176,7 @@ function AddLocForm() {
             <Input
               id="guests"
               type="number"
+              value={Number(guestCap)}
               name="guests"
               onChange={(e) => handleGstCapVal(Number(e.target.value))}
             />
@@ -167,6 +189,7 @@ function AddLocForm() {
             <Input
               id="bedroom"
               type="number"
+                            value={Number(bedrooms)}
               name="bedroom"
               onChange={(e) => handleBedroomCap(Number(e.target.value))}
             />
@@ -180,6 +203,7 @@ function AddLocForm() {
               id="beds"
               type="number"
               name="beds"
+                                          value={Number(beds)}
               onChange={(e) => handleBedCapVal(Number(e.target.value))}
             />
             {Errors?.beds && (
@@ -192,6 +216,7 @@ function AddLocForm() {
               id="bathroom"
               type="number"
               name="bathroom"
+                                          value={Number(bathrooms)}
               onChange={(e) => handleBathCapVal(Number(e.target.value))}
             />
             {Errors?.bathrooms && (
@@ -257,6 +282,7 @@ function AddLocForm() {
             id="price"
             type="number"
             name="price"
+                                        value={Number(price)}
             placeholder="Enter price per night"
             onChange={(e) => handleLocPriceVal(Number(e.target.value))}
           />
@@ -354,6 +380,7 @@ function AddLocForm() {
           <Textarea
             id="desc"
             name="desc"
+            value={others}
             placeholder="Write a short description..."
             onChange={(e) => handleLocDesc(e.target.value)}
           />

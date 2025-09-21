@@ -137,17 +137,18 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
 
 export const getLocDetail = async (id: string): Promise<AuthResponse> => {
   try {
-    const locDoc = await Location.findById(id);
+    const locDoc = await Location.findById(id).lean()
     if (locDoc === undefined || locDoc === null) {
       return {
         success: false,
         message: "Unable to get location Details",
       };
     }
+    const payload = JSON.stringify(locDoc)
     return {
       success: true,
       message: "Location Details fetched",
-      payload: locDoc,
+      payload
     };
   } catch (error) {
     console.log("Error in getUserLocs() " + error);
