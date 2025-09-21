@@ -1,7 +1,8 @@
-import { LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
+import { ImgType, LOC_ENUM, LocPhtsType, RentLocIfc } from "@/dataInterfaces";
 import mongoose, { Schema } from "mongoose";
 import Review from "./review";
 import User from "../models/user";
+import { dltUplImgArr } from "@/utils/server-utils/cloudinary";
 
 const locSchema: Schema<RentLocIfc> = new Schema(
   {
@@ -146,6 +147,14 @@ locSchema.pre("findOneAndDelete", async function (next) {
     if (docToFind) {
       const authorEmail = docToFind.locDtl.author.email;
       const locationId = docToFind._id;
+      const imgData = docToFind.locDtl.imgTtlData;
+      const pubIdArr = imgData.flatMap((i: LocPhtsType) =>
+        i.images.map((p: any, ind: number) => {
+          console.log(ind + " " + p.public_id);
+          return p.public_id;
+        })
+      );
+      await dltUplImgArr(pubIdArr);
       const type: string | null =
         docToFind.locType === LOC_ENUM.APPARTMENT_TYPE
           ? "Appartment"

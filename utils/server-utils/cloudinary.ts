@@ -55,3 +55,12 @@ export async function deleteUploadedImage(delImgId: string) {
     console.error(err);
   }
 }
+export async function dltUplImgArr(pubIdArr: string[]) {
+  try {
+    const result = await cloudinary.api.delete_resources(pubIdArr);
+    console.log(result)
+  } catch (err) {
+    console.error(err);
+  }
+}
+

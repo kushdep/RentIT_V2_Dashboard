@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EditIcon, Link2, TrashIcon } from "lucide-react";
+import { EditIcon, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
