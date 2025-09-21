@@ -126,6 +126,29 @@ export const updateLocationAction = async (
   }
 };
 
+export const delLocationAction = async(id:string):Promise<AuthResponse> =>{
+  try {
+    const delDoc = await Location.findByIdAndDelete(id)
+    console.log(delDoc)
+    if(!delDoc){
+      return {
+        success:false,
+        message:'Cannot find Location'
+      }
+    }
+    return {
+      success:true,
+      message:'Location deleted Successfully'
+    }
+  } catch (error) {
+    console.log('Error in delLocationAction() '+error)
+    return {
+      success:false,
+      message:'Something went Wrong'
+    }
+  }
+}
+
 export const getUserLocs = async (): Promise<AuthResponse> => {
   try {
     const decoded = await getCookieToken();
@@ -148,7 +171,7 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
     }
     const { locations } = userDoc;
     console.log(locations);
-    const payload: PropertyCardDataType[] = Object.entries(locations).flatMap(
+    let payload: PropertyCardDataType[] = Object.entries(locations).flatMap(
       ([key, val]: [string, unknown]) =>
         val.map((t: any) => ({
           _id: t._id,
@@ -161,10 +184,11 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
         }))
     );
 
+    let data = JSON.stringify(payload)
     return {
       success: true,
       message: "User Location fetched",
-      payload,
+      payload:data,
     };
   } catch (error) {
     console.log("Error in getUserLocs() " + error);

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon, Link2, TrashIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +14,12 @@ import {
 } from "@/components/ui/card";
 import { PropertyCardDataType } from "@/dataInterfaces";
 import ConfirmationDialog from "./modals/ConfirmationDialog";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState } from "react";
 
 const propertyCard = ({ loc }: { loc: PropertyCardDataType }) => {
-
-const router = useRouter()
+  const router = useRouter();
   return (
     <div className="relative max-w-md">
       <div className="relative h-50 w-full">
@@ -30,6 +31,14 @@ const router = useRouter()
           priority
         />
       </div>
+      <Link href={`http://localhost:5173/rent-locs/${loc._id}`} target="_blank">
+        <Button
+          size="icon"
+          className="bg-primary/50 hover:bg-primary/70 absolute end-4 top-4 rounded-full"
+        >
+          <Link2 />
+        </Button>
+      </Link>
 
       <Card className="relative -mt-6 rounded-xl shadow-xl bg-white">
         <CardHeader className="grid-cols-2 gap-4">
@@ -49,17 +58,16 @@ const router = useRouter()
         </CardContent>
 
         <CardFooter className="justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
-          <Button className="from-primary via-primary/60 to-primary bg-transparent bg-gradient-to-r [background-size:200%_auto] hover:bg-transparent hover:bg-[99%_center]" onClick={()=>router.push(`/dashboard/edit-loc/${loc._id}`)}>
-            <EditIcon />
-            Edit
-          </Button>
-          <Button
-            className="from-destructive via-destructive/60 to-destructive focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 bg-transparent bg-gradient-to-r [background-size:200%_auto] text-white hover:bg-transparent hover:bg-[99%_center]"
-          >
-            <TrashIcon />
-            <ConfirmationDialog />
-            Delete
-          </Button>
+          <Link href={`/dashboard/edit-loc/${loc._id}`} target="_blank">
+            <Button
+              className="from-primary via-primary/60 to-primary bg-transparent bg-gradient-to-r [background-size:200%_auto] hover:bg-transparent hover:bg-[99%_center]"
+              onClick={() => router.push(`/dashboard/edit-loc/${loc._id}`)}
+            >
+              <EditIcon />
+              Edit
+            </Button>
+          </Link>
+            <ConfirmationDialog id={loc._id}/>
         </CardFooter>
       </Card>
     </div>
