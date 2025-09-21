@@ -17,8 +17,8 @@ import { useEffect, useRef, useState } from "react";
 import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
-import { LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
-import { addLocationAction, getLocDetail } from "@/actions/LocationAction";
+import { AuthResponse, LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
+import { addLocationAction, getLocDetail, updateLocationAction } from "@/actions/LocationAction";
 import toast from "react-hot-toast";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -32,7 +32,8 @@ function AddLocForm() {
     imgTtlData,
     isSubm,
     price,
-    guestCap,
+    _id,
+    guestsCap,
     bathrooms,
     bedrooms,
     beds,
@@ -74,13 +75,13 @@ function AddLocForm() {
       return;
     }
 
-    const payload: RentLocIfc = {
+    let payload: RentLocIfc = {
       locType,
       locDtl: {
         title,
         imgTtlData,
         price,
-        guestCap,
+        guestsCap: guestsCap,
         desc: {
           bedrooms,
           beds,
@@ -92,7 +93,13 @@ function AddLocForm() {
       },
     };
     console.log(payload);
-    const res = await addLocationAction(payload);
+    let res: AuthResponse = { success: false, message: "" };
+    if (path.includes("/edit-loc")) {
+      payload["_id"] = _id
+      res = await updateLocationAction(payload);
+    } else {
+      res = await addLocationAction(payload);
+    }
     if (res.success) {
       toast.success(res.message);
       router.push("/dashboard/my-loc");
@@ -104,21 +111,19 @@ function AddLocForm() {
   }
 
   useEffect(() => {
-    console.log('Inside useEffect')
     async function updEditLocStt() {
       const { id } = params;
-      console.log(id)
       const res = await getLocDetail(id as string);
       if (!res.success) {
         toast.error(res.message);
         return;
       }
-      const data = JSON.parse(res.payload)
+      const data = JSON.parse(res.payload);
       populateLocStt(data);
     }
 
     if (path.includes("/edit-loc")) {
-        console.log(path)
+      console.log(path);
       updEditLocStt();
     }
   }, []);
@@ -148,7 +153,7 @@ function AddLocForm() {
           <div className="col-span-2">
             <Label>Location Type</Label>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild disabled={_id!=='' && locType !== LOC_ENUM.NONE}>
                 <Button variant="outline" className="w-full justify-between">
                   {locType === LOC_ENUM.NONE ? "Select Location Type" : locType}
                 </Button>
@@ -176,7 +181,7 @@ function AddLocForm() {
             <Input
               id="guests"
               type="number"
-              value={Number(guestCap)}
+              value={Number(guestsCap)}
               name="guests"
               onChange={(e) => handleGstCapVal(Number(e.target.value))}
             />
@@ -189,7 +194,7 @@ function AddLocForm() {
             <Input
               id="bedroom"
               type="number"
-                            value={Number(bedrooms)}
+              value={Number(bedrooms)}
               name="bedroom"
               onChange={(e) => handleBedroomCap(Number(e.target.value))}
             />
@@ -203,7 +208,7 @@ function AddLocForm() {
               id="beds"
               type="number"
               name="beds"
-                                          value={Number(beds)}
+              value={Number(beds)}
               onChange={(e) => handleBedCapVal(Number(e.target.value))}
             />
             {Errors?.beds && (
@@ -216,7 +221,7 @@ function AddLocForm() {
               id="bathroom"
               type="number"
               name="bathroom"
-                                          value={Number(bathrooms)}
+              value={Number(bathrooms)}
               onChange={(e) => handleBathCapVal(Number(e.target.value))}
             />
             {Errors?.bathrooms && (
@@ -282,7 +287,7 @@ function AddLocForm() {
             id="price"
             type="number"
             name="price"
-                                        value={Number(price)}
+            value={Number(price)}
             placeholder="Enter price per night"
             onChange={(e) => handleLocPriceVal(Number(e.target.value))}
           />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAddLoc } from "@/context/addLocContext";
+import { deleteUploadedImage } from "@/utils/server-utils/cloudinary";
 
 function getURLs(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -22,7 +23,7 @@ function getURLs(file: File): Promise<string> {
 function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) {
   const { imgTtlData, handleImgTtlStt } = useAddLoc();
   const [resolvedUrls, setResolvedUrls] = useState<string[]>(
-    imgTtlData[inpBoxInd].images as any
+    imgTtlData[inpBoxInd].images as any 
   );
   const [title, setTitle] = useState(imgTtlData[inpBoxInd].title);
 
@@ -57,6 +58,8 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
   function delImgUrl(ind: number) {
     setResolvedUrls((prev: string[]) => prev.filter((u, i) => i !== ind));
   }
+
+  console.log(resolvedUrls)
 
   return (
     <>
@@ -127,10 +130,10 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
 
           <div className="my-3">
             <div className="flex flex-wrap gap-2">
-              {resolvedUrls?.map((ele, i) => (
-                <div key={i} className="relative">
+              {resolvedUrls?.map((ele, i) => {
+                return <div key={i} className="relative">
                   <img
-                    src={ele}
+                    src={ele?.url??ele}
                     alt={`uploaded-${i}`}
                     className="w-12 h-12 rounded border object-cover"
                   />
@@ -139,13 +142,18 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
                     disabled={isEdit ? true : false}
                     className="absolute -top-2 -right-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
                     onClick={() => {
+                      if(ele?.url?.includes('demncxfgx')){
+                        console.log('inside')
+                        console.log(ele.public_id)
+                        deleteUploadedImage(ele.public_id)
+                      }
                       delImgUrl(i);
                     }}
                   >
                     <img src="/icons/x-circle.svg" alt="remove" />
                   </button>
                 </div>
-              ))}
+})}
               {resolvedUrls.length < 5 && (
                 <div className="relative inline-block">
                   <button

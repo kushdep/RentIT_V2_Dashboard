@@ -10,10 +10,11 @@ import {
 import React, { createContext, useContext, useState } from "react";
 
 type AddLocContextType = {
+  _id: string | undefined;
   locType: LOC_ENUM;
   title: string;
   price: number | null;
-  guestCap: number | null;
+  guestsCap: number | null;
   imgTtlData: LocPhtsType[];
   bedrooms: number | null;
   bathrooms: number | null;
@@ -55,7 +56,9 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   const [bathCap, setBathCap] = useState<number | null>(null);
   const [err, setErr] = useState<object>({});
   const [isSubm, setIsSubm] = useState(false);
-  const [imgTtlErr, setimgTtlErr] = useState<{ index: number; message: string }[]>([]);
+  const [imgTtlErr, setimgTtlErr] = useState<
+    { index: number; message: string }[]
+  >([]);
   const [locAddr, setLocAddr] = useState<LocAddsType>({
     address: "",
     placeId: "",
@@ -188,6 +191,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function populateLocStt(val: RentLocIfc) {
+    console.log(val);
     const { locDtl } = val;
     setLocId(val._id?.toString());
     setImgTtlStt(locDtl.imgTtlData);
@@ -199,18 +203,19 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     setLocDesc(locDtl.desc.others);
     setLocName(locDtl.title);
     setLocType(val.locType!);
-    setRentPrice(locDtl.price)
-    setGstPlcCp(locDtl.guestCap)
+    setRentPrice(locDtl.price);
+    setGstPlcCp(locDtl.guestsCap);
   }
 
   const ctxVal = {
+    _id: id,
     locType: locType,
     handleLocTypeVal,
     title: locName,
     handleLocTtlVal,
     price: rentPrice,
     handleLocPriceVal,
-    guestCap: gstPlcCp,
+    guestsCap: gstPlcCp,
     handleGstCapVal,
     imgTtlData: imgTtlStt,
     handleImgTtlStt,

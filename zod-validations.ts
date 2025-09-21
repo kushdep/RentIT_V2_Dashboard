@@ -16,7 +16,7 @@ export const RentLocSchema = z.object({
       })
     ),
     price: z.number(),
-    guestCap: z.number(),
+    guestsCap: z.number(),
     desc: z.object({
       bedrooms: z.number(),
       bathrooms: z.number(),
@@ -32,7 +32,7 @@ export const RentLocSchema = z.object({
     ),
     location: z.object({
       address: z.string(),
-      placeId: z.string(),
+      placeId: z.string().optional(),
       plusCode: z
         .object({
           compound_code: z.string().optional(),

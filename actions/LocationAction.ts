@@ -86,6 +86,46 @@ export const addLocationAction = async (
   }
 };
 
+export const updateLocationAction = async (
+  payload: RentLocIfc
+): Promise<AuthResponse> => {
+  try {
+    const res = RentLocSchema.safeParse(payload);
+    console.log(res)
+    if (!res.success) {
+      return {
+        success: false,
+        message: "Data validation failed",
+      };
+    }
+    const uplRes = await imageUpload(payload.locDtl.imgTtlData);
+    if (!uplRes.success) {
+      return {
+        success: false,
+        message: "image upload failed",
+      };
+    }
+    payload.locDtl.imgTtlData = uplRes.imgTtlData;
+    const locRes = await Location.findByIdAndUpdate({ _id: payload._id },payload);
+    if (locRes === undefined || locRes === null) {
+      return {
+        success: false,
+        message: "Unable to add Location",
+      };
+    }
+    return {
+      success: true,
+      message: "Location Updated Successfully",
+    };
+  } catch (error) {
+    console.log("Error in addLocationAction() " + error);
+    return {
+      success: false,
+      message: "Something went wrong",
+    };
+  }
+};
+
 export const getUserLocs = async (): Promise<AuthResponse> => {
   try {
     const decoded = await getCookieToken();
@@ -137,18 +177,18 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
 
 export const getLocDetail = async (id: string): Promise<AuthResponse> => {
   try {
-    const locDoc = await Location.findById(id).lean()
+    const locDoc = await Location.findById(id).lean();
     if (locDoc === undefined || locDoc === null) {
       return {
         success: false,
         message: "Unable to get location Details",
       };
     }
-    const payload = JSON.stringify(locDoc)
+    const payload = JSON.stringify(locDoc);
     return {
       success: true,
       message: "Location Details fetched",
-      payload
+      payload,
     };
   } catch (error) {
     console.log("Error in getUserLocs() " + error);

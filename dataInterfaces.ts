@@ -73,7 +73,7 @@ export type LocDtlType = {
   title: string;
   imgTtlData: LocPhtsType[];
   price: number | null;
-  guestCap: number | null;
+  guestsCap: number | null;
   desc: DescDataType;
   facilities: LocFaciType[];
   location: LocAddsType;
@@ -82,7 +82,7 @@ export type LocDtlType = {
 };
 
 export interface RentLocIfc {
-  _id?: Types.ObjectId;
+  _id?: string;
   Sno?: number;
   locType: LOC_ENUM | null;
   locDtl: LocDtlType;

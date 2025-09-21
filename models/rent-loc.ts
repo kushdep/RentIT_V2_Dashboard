@@ -40,7 +40,7 @@ const locSchema:Schema<RentLocIfc> = new Schema({
             type: Number,
             required: true
         },
-        guestCap: {
+        guestsCap: {
             type: Number,
             required: true
         },
