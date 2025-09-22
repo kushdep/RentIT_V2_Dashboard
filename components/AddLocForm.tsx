@@ -306,9 +306,7 @@ function AddLocForm() {
           >
             {imgTtlData.length > 0 ? "Edit Images" : "Add Images"}
           </Button>
-          {imgTtlData.length > 0 &&
-            (imgTtlData[0].title === "" ||
-              imgTtlData[0].images.length === 0) && (
+          {imgTtlData.length < 3 || imgTtlErr.length>0 && (
               <p className="text-xs text-red-600">
                 Please Add valid images{" "}
                 {Errors?.imgTtl && `& ${Errors["imgTtl"]}`}{" "}

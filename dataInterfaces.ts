@@ -127,7 +127,7 @@ export type AddressValDataType = {
 };
 
 export type JwtTokenVrfType = {
-  _id: string;
+  _id?: string;
   email: string;
   iat: number;
   exp: number;

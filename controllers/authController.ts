@@ -1,5 +1,7 @@
 import "server-only";
 
+import { jwtDecrypt } from "jose";
+import hkdf from "@panva/hkdf";
 import { AuthResponse, IUserIfc, JwtTokenVrfType } from "./../dataInterfaces";
 import { LoginFormStt } from "../dataInterfaces";
 import jwt from "jsonwebtoken";
@@ -7,22 +9,50 @@ import bcrypt from "bcrypt";
 import User from "../models/user";
 import { cookies } from "next/headers";
 
+async function getDerivedEncryptionKey(keyMaterial: string, salt: string) {
+  return await hkdf(
+    "sha256",
+    keyMaterial,
+    salt,
+    `NextAuth.js Generated Encryption Key${salt ? ` (${salt})` : ""}`,
+    32
+  );
+}
+async function decryptToken(token: string, secret: string) {
+  const encryptionKey = await getDerivedEncryptionKey(secret, "");
+  const { payload } = await jwtDecrypt(token, encryptionKey);
+  return payload;
+}
+
 export async function getCookieToken(): Promise<
   JwtTokenVrfType | null | undefined
 > {
   try {
     const cookieStore = await cookies();
-    const token =
-      cookieStore.get("sessionToken")?.value ??
-      cookieStore.get("next-auth.session-token")?.value ??
-      null;
-    if (token === undefined || token === null) {
+    let token;
+    let decoded;
+    if (cookieStore.get("sessionToken")?.value) {
+      token = cookieStore.get("sessionToken")?.value;
+      decoded = jwt.verify(
+        token!,
+        process.env.JWT_SECRET as string
+      ) as JwtTokenVrfType;
+    }
+    if (cookieStore.get("next-auth.session-token")?.value) {
+      token = cookieStore.get("next-auth.session-token")?.value;
+      const payload = await decryptToken(
+        token!,
+        process.env.NEXTAUTH_SECRET as string
+      );
+      decoded = {
+        email: payload.email as string,
+        iat: payload.iat,
+        exp: payload.exp,
+      };
+    }
+    if (token === undefined || token === null || decoded===undefined || decoded===null) {
       return null;
     }
-    const decoded = jwt.verify(
-      token!,
-      process.env.JWT_SECRET as string
-    ) as JwtTokenVrfType;
     return decoded;
   } catch (error) {
     console.log("Error in getToken() " + error);

@@ -37,6 +37,7 @@ export async function imageUpload(
     return { success: true, imgTtlData };
   } catch (error) {
     console.log("ERROR IN imageUpload()- " + error);
+    console.log(error)
     return { success: false, imgTtlData };
   }
 }

@@ -10,11 +10,12 @@ function AddImgTtlModal({
 }: {
   reference: RefObject<HTMLDialogElement> | null;
 }) {
-  const { imgTtlData, handleImgTtlStt, imgTtlErr, handleImgTtlErr } = useAddLoc();
+  const { imgTtlData, handleImgTtlStt, imgTtlErr, handleImgTtlErr } =
+    useAddLoc();
   const [imgInpCnt, setImgInpCnt] = useState(imgTtlData.length);
 
   function chckFields() {
-    let imgTttlErr = [];
+    let err = [];
     for (const [ind, val] of imgTtlData.entries()) {
       if (val.title.length < 3 || val.images.length < 1) {
         let message = "";
@@ -25,14 +26,16 @@ function AddImgTtlModal({
         } else if (val.images.length < 1) {
           message = "Please Add atleast one image";
         }
-        imgTttlErr.push({
+        err.push({
           index: ind,
           message,
         });
       }
     }
-    handleImgTtlErr(imgTtlErr);
+    handleImgTtlErr(err);
   }
+
+  console.log(imgTtlErr);
 
   return (
     <>
@@ -42,6 +45,10 @@ function AddImgTtlModal({
              backdrop:bg-black/40
              fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       >
+        {imgTtlErr.length > 0 && (
+          <p className="text-xs text-red-600">Please Enter Valid details</p>
+        )}
+
         {imgTtlData.map((e, i) => {
           const message = imgTtlErr?.find(({ index }) => index === i)?.message;
           return <AddImgTtlInputBox key={i} inpBoxInd={i} err={message!} />;

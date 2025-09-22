@@ -12,6 +12,7 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60,
@@ -37,5 +38,7 @@ const handler = NextAuth({
     },
   },
 });
+
+
 
 export { handler as GET, handler as POST };

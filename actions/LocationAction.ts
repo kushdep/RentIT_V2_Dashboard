@@ -38,14 +38,15 @@ export const addLocationAction = async (
         message: "User token issue",
       };
     }
-    const user = await User.findById({ _id: decoded._id as string });
+    let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
+    const user = await User.findOne(query);
     const author = {
       username: user.username,
       email: user.email,
     };
     const Sno = await Location.countDocuments();
     payload.locDtl["author"] = author;
-    payload["Sno"] = Sno + 3;
+    payload["Sno"] = Sno + 1;
     console.log(payload);
     const locRes = await Location.create(payload);
     if (locRes === undefined || locRes === null) {
@@ -62,7 +63,7 @@ export const addLocationAction = async (
         : "Villa";
 
     const userUpdRes = await User.findByIdAndUpdate(
-      { _id: decoded._id },
+      { _id: user._id },
       { $push: { [`locations.${locTypeName}`]: locRes._id } },
       { new: true }
     );
@@ -72,10 +73,11 @@ export const addLocationAction = async (
         message: "Unable to add location in user profile",
       };
     }
+    const id = JSON.stringify(locRes._id)
     return {
       success: true,
       message: "Location Added Successfully",
-      payload: locRes._id.toString(),
+      payload: id,
     };
   } catch (error) {
     console.log("Error in addLocationAction() " + error);
@@ -91,7 +93,7 @@ export const updateLocationAction = async (
 ): Promise<AuthResponse> => {
   try {
     const res = RentLocSchema.safeParse(payload);
-    console.log(res)
+    console.log(res);
     if (!res.success) {
       return {
         success: false,
@@ -106,7 +108,10 @@ export const updateLocationAction = async (
       };
     }
     payload.locDtl.imgTtlData = uplRes.imgTtlData;
-    const locRes = await Location.findByIdAndUpdate({ _id: payload._id },payload);
+    const locRes = await Location.findByIdAndUpdate(
+      { _id: payload._id },
+      payload
+    );
     if (locRes === undefined || locRes === null) {
       return {
         success: false,
@@ -126,28 +131,28 @@ export const updateLocationAction = async (
   }
 };
 
-export const delLocationAction = async(id:string):Promise<AuthResponse> =>{
+export const delLocationAction = async (id: string): Promise<AuthResponse> => {
   try {
-    const delDoc = await Location.findByIdAndDelete(id)
-    console.log(delDoc)
-    if(!delDoc){
+    const delDoc = await Location.findByIdAndDelete(id);
+    console.log(delDoc);
+    if (!delDoc) {
       return {
-        success:false,
-        message:'Cannot find Location'
-      }
+        success: false,
+        message: "Cannot find Location",
+      };
     }
     return {
-      success:true,
-      message:'Location deleted Successfully'
-    }
+      success: true,
+      message: "Location deleted Successfully",
+    };
   } catch (error) {
-    console.log('Error in delLocationAction() '+error)
+    console.log("Error in delLocationAction() " + error);
     return {
-      success:false,
-      message:'Something went Wrong'
-    }
+      success: false,
+      message: "Something went Wrong",
+    };
   }
-}
+};
 
 export const getUserLocs = async (): Promise<AuthResponse> => {
   try {
@@ -158,7 +163,8 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
         message: "User token issue",
       };
     }
-    const userDoc = await User.findById(decoded._id).populate([
+    let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
+    const userDoc = await User.findOne(query).populate([
       "locations.Appartment",
       "locations.Villa",
       "locations.Penthouse",
@@ -183,12 +189,17 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
           reviews: t.locDtl?.reviews.length ?? 0,
         }))
     );
-
-    let data = JSON.stringify(payload)
+    if (payload.length === 0) {
+      return {
+        success: false,
+        message: "Unable to get user Location",
+      };
+    }
+    let data = JSON.stringify(payload);
     return {
       success: true,
       message: "User Location fetched",
-      payload:data,
+      payload: data,
     };
   } catch (error) {
     console.log("Error in getUserLocs() " + error);

@@ -112,7 +112,7 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
             </div>
           </div>
 
-          {err!==null || err!=='' && <div className="text-red-500 text-xs mt-1">{err}</div>}
+          {err && <div className="text-red-500 text-xs mt-1">{err}</div>}
 
           <input
             type="text"

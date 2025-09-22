@@ -7,11 +7,11 @@ import Link from "next/link";
 async function MyLocPage() {
   const { payload } = await getUserLocs();
   console.log(payload);
-  let locDetails = JSON.parse(payload)
+  let locDetails = payload!==undefined ? JSON.parse(payload) : null
 
-  return (
+  return ( 
     <>
-      {locDetails.length > 0 ? (
+      {locDetails!==null ? (
         <div className="grid grid-cols-3 gap-x-8 gap-y-4 my-4 mx-4">
           {locDetails!.map((l: PropertyCardDataType, i: number) => {
             console.log(l.image);

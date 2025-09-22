@@ -146,7 +146,7 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
     if (imgTtlStt.length < 3) {
       errs["imgTtl"] = "atleast 3 places image of Location";
     }
-
+console.log(errs)
     setErr(errs);
     return errs;
   }
