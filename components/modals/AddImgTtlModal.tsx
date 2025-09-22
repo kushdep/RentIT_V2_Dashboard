@@ -19,23 +19,28 @@ function AddImgTtlModal({
     for (const [ind, val] of imgTtlData.entries()) {
       if (val.title.length < 3 || val.images.length < 1) {
         let message = "";
+        console.log(message)
         if (val.title.length < 3 && val.images.length < 1) {
           message = "Please Enter Title & Add Images";
+          console.log(message)
         } else if (val.title.length < 3) {
           message = "Please Enter Valid Title";
+          console.log(message)
         } else if (val.images.length < 1) {
           message = "Please Add atleast one image";
+          console.log(message)
         }
+        console.log(message)
         err.push({
           index: ind,
           message,
         });
+        console.log(err)
       }
     }
     handleImgTtlErr(err);
   }
 
-  console.log(imgTtlErr);
 
   return (
     <>

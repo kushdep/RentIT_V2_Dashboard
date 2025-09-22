@@ -36,7 +36,11 @@ function GoogleMapAddsInput() {
           <Input
             value={inpVal.val}
             disabled={!isLoaded}
-            onChange={(e) => handleInpVal({ val: e.target.value, index: null })}
+            onChange={(e) => {
+              if(!isDropdownOpen){
+                setIsDropdownOpen(true)
+              }
+              handleInpVal({ val: e.target.value, index: null })}}
             id="address"
             type="text"
             name="address"

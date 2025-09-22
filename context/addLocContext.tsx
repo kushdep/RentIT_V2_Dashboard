@@ -144,9 +144,13 @@ export const AddLocProvider = ({ children }: { children: React.ReactNode }) => {
       errs["facilities"] = "Select Atleast 2 facilities of your Location";
     }
     if (imgTtlStt.length < 3) {
+      console.log(imgTtlStt.length)
       errs["imgTtl"] = "atleast 3 places image of Location";
     }
-console.log(errs)
+    if(imgTtlErr.length>0){
+      errs["imgTtlInp"] = "Enter valid Details";
+    }
+
     setErr(errs);
     return errs;
   }

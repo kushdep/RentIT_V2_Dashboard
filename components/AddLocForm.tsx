@@ -18,7 +18,11 @@ import AddImgTtlModal from "@/components/modals/AddImgTtlModal";
 import { useAddLoc } from "@/context/addLocContext";
 import AddAmmModal from "./modals/AddAmmModal";
 import { AuthResponse, LOC_ENUM, RentLocIfc } from "@/dataInterfaces";
-import { addLocationAction, getLocDetail, updateLocationAction } from "@/actions/LocationAction";
+import {
+  addLocationAction,
+  getLocDetail,
+  updateLocationAction,
+} from "@/actions/LocationAction";
 import toast from "react-hot-toast";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -95,7 +99,7 @@ function AddLocForm() {
     console.log(payload);
     let res: AuthResponse = { success: false, message: "" };
     if (path.includes("/edit-loc")) {
-      payload["_id"] = _id
+      payload["_id"] = _id;
       res = await updateLocationAction(payload);
     } else {
       res = await addLocationAction(payload);
@@ -153,7 +157,10 @@ function AddLocForm() {
           <div className="col-span-2">
             <Label>Location Type</Label>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild disabled={_id!=='' && locType !== LOC_ENUM.NONE}>
+              <DropdownMenuTrigger
+                asChild
+                disabled={_id !== "" && locType !== LOC_ENUM.NONE}
+              >
                 <Button variant="outline" className="w-full justify-between">
                   {locType === LOC_ENUM.NONE ? "Select Location Type" : locType}
                 </Button>
@@ -306,12 +313,12 @@ function AddLocForm() {
           >
             {imgTtlData.length > 0 ? "Edit Images" : "Add Images"}
           </Button>
-          {imgTtlData.length < 3 || imgTtlErr.length>0 && (
-              <p className="text-xs text-red-600">
-                Please Add valid images{" "}
-                {Errors?.imgTtl && `& ${Errors["imgTtl"]}`}{" "}
-              </p>
-            )}
+          {Errors?.imgTtl && (
+            <p className="text-xs text-red-600">Atleast 3 places image required</p>
+          )}
+          {imgTtlErr.length>0 && (
+            <p className="text-xs text-red-600">Enter Valid Details</p>
+          )}
         </div>
         <div>
           <Label>Offered Amenities</Label>

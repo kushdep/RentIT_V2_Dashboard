@@ -59,8 +59,6 @@ function AddImgTtlInputBox({ inpBoxInd,err }: { inpBoxInd: number,err:string }) 
     setResolvedUrls((prev: string[]) => prev.filter((u, i) => i !== ind));
   }
 
-  console.log(resolvedUrls)
-
   return (
     <>
       <div
