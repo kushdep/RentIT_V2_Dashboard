@@ -128,7 +128,7 @@ const locSchema: Schema<RentLocIfc> = new Schema(
       },
       reviews: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Types.ObjectId,
           ref: "Review",
         },
       ],
@@ -137,6 +137,51 @@ const locSchema: Schema<RentLocIfc> = new Schema(
       type: Number,
       default: 0,
     },
+    bookings: [
+      {
+        email: {
+          type: String,
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
+        start: {
+          type: String,
+          required: true,
+        },
+        end: {
+          type: String,
+          required: true,
+        },
+        payment: {
+          type: Schema.Types.ObjectId,
+          ref: "Payment",
+        },
+        checkIn: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+      },
+    ],
+    stats: [
+      {
+        month: {
+          type: String,
+          required: true,
+        },
+        totalRevenue: {
+          type: Number,
+          required: true,
+        },
+        totalBookings: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

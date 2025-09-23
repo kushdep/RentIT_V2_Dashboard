@@ -34,24 +34,24 @@ const UserSchema: Schema<IUserIfc> = new Schema(
       },
     },
     locations: {
-        Appartment: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: "Location",
-          },
-        ],
-        Villa: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: "Location",
-          },
-        ],
-        Penthouse: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: "Location",
-          },
-        ],
+      Appartment: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Location",
+        },
+      ],
+      Villa: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Location",
+        },
+      ],
+      Penthouse: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Location",
+        },
+      ],
     },
     savedLoc: [
       {
@@ -73,8 +73,34 @@ const UserSchema: Schema<IUserIfc> = new Schema(
         },
       },
     },
+    trips: [
+      {
+        location: {
+          type: mongoose.Types.ObjectId,
+          ref: "Location",
+        },
+        start: {
+          type: Number,
+          required: true,
+        },
+        end: {
+          type: Number,
+          required: true,
+        },
+        payment: {
+          type: Schema.Types.ObjectId,
+          ref: "Payment",
+        },
+        checkIn: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model<IUserIfc>("User", UserSchema);
+export default mongoose.models.User ||
+  mongoose.model<IUserIfc>("User", UserSchema);

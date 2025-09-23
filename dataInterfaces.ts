@@ -81,14 +81,43 @@ export type LocDtlType = {
   reviews?: Types.ObjectId[];
 };
 
+export interface BookingStatsType{
+  month:string,
+  totalRevenue:Number,
+  totalBookings:Number
+}
+export interface BookingPaymentType{
+  userId:string,
+  refId:string,
+  amount:number
+  createdAt?:Date
+}
+export interface LocBookingType{
+  email:string,
+  username:string,
+  start:string,
+  end:string,
+  payment:string,
+  checkIn:boolean
+}
+
 export interface RentLocIfc {
   _id?: string;
   Sno?: number;
   locType: LOC_ENUM | null;
   locDtl: LocDtlType;
   stars?: number | 0;
+  bookings?:LocBookingType[];
+  stats?:BookingStatsType[];
 }
 
+export interface BookedTripsType {
+  location:string,
+  start:number,
+  end:number,
+  payment:string,
+  checkIn:boolean
+}
 export interface IUserIfc {
   _id: Types.ObjectId;
   username: string;
@@ -112,6 +141,7 @@ export interface IUserIfc {
   userType: {
     propertier: boolean;
   };
+  trips:BookedTripsType[],
   createdAt: Date;
   updatedAt: Date;
 }
