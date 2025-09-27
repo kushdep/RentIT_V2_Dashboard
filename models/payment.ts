@@ -3,17 +3,21 @@ import mongoose, { Schema, Types } from "mongoose";
 
 const PaymentSchema: Schema<BookingPaymentType> = new Schema(
   {
-    userId: {
-      type: Types.ObjectId,
-      required: true,
+    userId:{
+        type:Types.ObjectId,
+        required:true
     },
-    refId: {
-      type: String,
-      required: true,
+    razorpay_payment_id:{
+        type:String,
+        required:true
     },
-    amount: {
-      type: Number,
-      required: true,
+    razorpay_order_id:{
+        type:String,
+        required:true
+    },
+    amount:{
+        type:Number,
+        required:true
     },
   },
   { timestamps: true }

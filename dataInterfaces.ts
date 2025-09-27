@@ -82,23 +82,23 @@ export type LocDtlType = {
 };
 
 export interface BookingStatsType{
-  month:string,
-  totalRevenue:Number,
-  totalBookings:Number
+  totalRevenue:number,
+  totalBookings:number
 }
 export interface BookingPaymentType{
   userId:string,
-  refId:string,
+  razorpay_payment_id:string,
+  razorpay_order_id:string,
   amount:number
   createdAt?:Date
 }
 export interface LocBookingType{
-  email:string,
-  username:string,
+  location:string,
+  user:LocAuthorType,
   start:string,
   end:string,
-  payment:string,
-  checkIn:boolean
+  payment:BookingPaymentType,
+  checkIn:Date
 }
 
 export interface RentLocIfc {
@@ -108,7 +108,7 @@ export interface RentLocIfc {
   locDtl: LocDtlType;
   stars?: number | 0;
   bookings?:LocBookingType[];
-  stats?:BookingStatsType[];
+  stats?:Map<string,BookingStatsType>;
 }
 
 export interface BookedTripsType {

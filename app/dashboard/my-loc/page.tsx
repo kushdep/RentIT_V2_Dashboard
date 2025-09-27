@@ -1,3 +1,4 @@
+import { getUpcomingGuests } from "@/actions/GuestsActions";
 import { getUserLocs } from "@/actions/LocationAction";
 import PropertyCard from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,14 @@ async function MyLocPage() {
   const { payload } = await getUserLocs();
   console.log(payload);
   let locDetails = payload!==undefined ? JSON.parse(payload) : null
+
+
+  async function getGuest(){
+    await getUpcomingGuests()
+
+  }
+
+  getGuest()
 
   return ( 
     <>
