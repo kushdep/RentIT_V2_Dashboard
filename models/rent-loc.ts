@@ -148,12 +148,10 @@ const locSchema: Schema<RentLocIfc> = new Schema(
           type: String,
           required: true,
         },
-        bookingDetails: [
-          {
+        bookingDetails: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Bookings",
           },
-        ],
       },
     ],
     stats: { type: Map, of: Object },
