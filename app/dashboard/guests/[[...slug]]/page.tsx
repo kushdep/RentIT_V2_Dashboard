@@ -1,7 +1,6 @@
 import { getGuestsData } from "@/actions/GuestsActions";
-import { TableDemo } from "@/components/GuestDataTable";
-import PropertyCard from "@/components/PropertyCard";
-import SelectWithOptionsGroupsDemo from "@/components/SelectSCS";
+import GuestsDataTable from "@/components/GuestDataTable";
+import GuestsCardData from "@/components/GuestsCardData";
 import { PropertyCardDataType } from "@/dataInterfaces";
 import { redirect } from "next/navigation";
 
@@ -12,83 +11,90 @@ async function UpcomingGuestsPage({
 }) {
   const { slug } = await params;
 
-  if (slug.length === 0) {
-    redirect("/guests/history");
+  console.log(slug);
+  if (!slug) {
+    redirect("/dashboard/guests/history");
   }
-
+  console.log(slug);
   const data = await getGuestsData();
+
+  console.log(data);
+
   if (!data.success) {
     return <>Something went wrong</>;
   }
 
   const { payload } = data;
-  let upBookingList = [];
-  let histBookingList = [];
-
-  if(payload.length>0 && slug.length===1){
-
-  }
+  console.log(payload);
 
   if (payload.length > 0) {
     const today = new Date().getTime();
     const nextDayDate = new Date(today + 24 * 60 * 60 * 1000).getTime();
     if (slug[0] === "upcoming") {
-      upBookingList = payload.filter((e: any) => {
-        const bkngDate = new Date(e.bookings.start).getTime();
-        return nextDayDate <= bkngDate;
+      payload.forEach((loc) => {
+          loc.bookings = loc.bookings.filter((e: any) => {
+              const bkngDate = new Date(e.start).getTime();
+              return nextDayDate <= bkngDate;
+            });
+            console.log("loc.bookings")
+            console.log(loc.bookings)
       });
     } else if (slug[0] === "history") {
-      histBookingList = payload.filter((e: any) => {
-        const bkngDate = new Date(e.bookings.end).getTime();
-        return bkngDate < today;
+        payload.forEach((loc) => {
+        console.log(loc.bookings)
+        loc.bookings = loc.bookings.filter((e: any) => {
+          const bkngDate = new Date(e.end).getTime();
+          return bkngDate < today;
+        });
       });
     }
   }
-
-
   return (
     <>
-      <div className="flex-row-1 my-4 mx-4 border">
-        <SelectWithOptionsGroupsDemo />
-      </div>
-      <div className="grid grid-cols-3 gap-x-8 gap-y-4 border">
-        {
-            slug.length===1 ? (slug[0]==='upcoming' ?
-                (upBookingList.length===0?
-                <>No Data</>
-                :
-                upBookingList.map((e:any)=>{
-                const data:PropertyCardDataType ={
-                    _id:e._id,
-                    type:e.locType,
-                    title:e.locDtl.title,
-                    image:e.locDtl.imgTtlData.images[0].url,
-                    price:e.locDtl.price,
-                    address:e.locDtl.location.address,
-                    reviews:e.locDtl.reviews.length
-                } 
-                return <PropertyCard loc={data}/>}))
-                :
-                (slug[0]==='history'?
-                (histBookingList.length===0?
-                <>No Data</>
-                :
-                histBookingList.map((e:any)=>{
-                const data:PropertyCardDataType ={
-                    _id:e._id,
-                    type:e.locType,
-                    title:e.locDtl.title,
-                    image:e.locDtl.imgTtlData.images[0].url,
-                    price:e.locDtl.price,
-                    address:e.locDtl.location.address,
-                    reviews:e.locDtl.reviews.length
-                } 
-                return <PropertyCard loc={data}/>}))
-                :
-                <>NO Data to show</>))
-                :
-                <TableDemo/>
-        }
+      <div className="grid grid-cols-3 gap-x-8 gap-y-4 mx-4 my-4 w-full">
+        {slug.length === 1 ? (
+          slug[0] === "upcoming" ? (
+            payload.length === 0 ? (
+              <>No Data</>
+            ) : (
+              payload.map((e: any,i:number) => {
+                console.log(e)
+                const data: PropertyCardDataType = {
+                  _id: e._id,
+                  type: e.locType,
+                  title: e.locDtl.title,
+                  image: e.locDtl.imgTtlData[0].images[0].url,
+                  price: e.bookings.length,
+                  address: e.locDtl.location.address,
+                  reviews: e.locDtl.reviews.length,
+                };
+                console.log(data)
+                return <GuestsCardData key={i} loc={data} gstType={'upcoming'} />;
+              })
+            )
+          ) : slug[0] === "history" ? (
+            payload.length === 0 ? (
+              <>No Data</>
+            ) : (
+              payload.map((e: any,i:number) => {
+                const data: PropertyCardDataType = {
+                  _id: e._id,
+                  type: e.locType,
+                  title: e.locDtl.title,
+                  image: e.locDtl.imgTtlData[0].images[0].url,
+                  price: e.locDtl.price,
+                  address: e.locDtl.location.address,
+                  reviews: e.locDtl.reviews.length,
+                };
+                return <GuestsCardData loc={data} gstType={'upcoming'}/>;
+              })
+            )
+          ) : (
+            <>NO Data to show</>
+          )
+        ) : (
+          <GuestsDataTable />
+        )}
       </div>
     </>
   );

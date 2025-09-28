@@ -24,7 +24,7 @@ export const getGuestsData = async ():Promise<AuthResponse> => {
     const bookingData = locDoc.filter((e)=> e.bookings.length>0?true:false )
     console.log(bookingData) 
     return {
-      success: false,
+      success: true,
       message: "Something went wrong",
       payload:bookingData
     };
