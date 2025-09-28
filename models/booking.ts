@@ -25,6 +25,12 @@ const bookingSchema:Schema<LocBookingType> = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Payment",
     },
+    stayDuration:{
+        type:Number
+    },
+    totalGuests:{
+        type:Number
+    },
     checkIn: {
         type: Date,
     }

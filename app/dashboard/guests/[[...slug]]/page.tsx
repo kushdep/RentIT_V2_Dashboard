@@ -1,5 +1,6 @@
 import { getGuestsData } from "@/actions/GuestsActions";
-import GuestsDataTable from "@/components/GuestDataTable";
+import UpcomingGuestData from "@/components/UpcomingGuestData";
+import GuestsDataTable from "@/components/GuestsDataTable";
 import GuestsCardData from "@/components/GuestsCardData";
 import { PropertyCardDataType } from "@/dataInterfaces";
 import { redirect } from "next/navigation";
@@ -43,7 +44,6 @@ async function UpcomingGuestsPage({
       payload.forEach((loc) => {
         console.log(loc.bookings);
         loc.bookings = loc.bookings.filter((e: any) => {
-            
           const bkngDate = new Date(e.end).getTime();
           return bkngDate < today;
         });
@@ -54,21 +54,22 @@ async function UpcomingGuestsPage({
   let bookingsData: any = [];
   if (slug.length === 2) {
     const id = slug[1];
-    console.log(id)
+    console.log(id);
     bookingsData = payload.find((e: any) => {
-        console.log(e._id)
-        const locID = String(e._id)
-        return locID === id});
-    console.log(bookingsData)
+      console.log(e._id);
+      const locID = String(e._id);
+      return locID === id;
+    });
+    console.log(bookingsData);
   }
 
-  console.log(bookingsData)
+  console.log(bookingsData);
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-x-8 gap-y-4 mx-4 my-4 w-full">
-        {slug.length === 1 ? (
-          slug[0] === "upcoming" ? (
+      {slug.length === 1 ? (
+        <div className="grid grid-cols-3 gap-x-8 gap-y-4 mx-4 my-4 w-full">
+          {slug[0] === "upcoming" ? (
             payload.length === 0 ? (
               <>No Data</>
             ) : (
@@ -108,15 +109,35 @@ async function UpcomingGuestsPage({
             )
           ) : (
             <>NO Data to show</>
-          )
-        ) : (
-          slug.length === 2 &&
-          bookingsData.bookings.map((p: any, i: number) => {
-            console.log(p.bookingDetails)
-            return <GuestsDataTable key={i}/>;
-          })
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-x-8 gap-y-4 mx-4 my-4">
+          {slug.length === 2 &&
+            bookingsData.bookings.map((p: any, i: number) => {
+                console.log(p.bookingDetails)
+                console.log(p.bookingDetails.totalGuests)
+                console.log(p.bookingDetails.stayDuration)
+                console.log(bookingsData.locDtl.price)
+                const totalAmt = p.bookingDetails.payment.amount/100 
+              const data = {
+                start:new Date(p.start).toDateString(),
+                end:new Date(p.end).toDateString(),
+                username:p.bookingDetails.user.username,
+                email:p.bookingDetails.user.email,
+                totalAmt,
+                totalGuests:p.bookingDetails.totalGuests,
+                stayDuration:p.bookingDetails.stayDuration
+              };
+              console.log(data)
+              if (slug[0] === "upcoming") {
+                return <UpcomingGuestData key={i} bkngData={data} />;
+              } else if (slug[0] === "upcoming") {
+                return <GuestsDataTable key={i} bkngData={data} />;
+              }
+            })}
+        </div>
+      )}
     </>
   );
 }

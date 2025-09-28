@@ -98,6 +98,8 @@ export interface LocBookingType {
   start: string;
   end: string;
   payment: BookingPaymentType;
+  stayDuration: number;
+  totalGuests: number;
   checkIn: Date;
 }
 
