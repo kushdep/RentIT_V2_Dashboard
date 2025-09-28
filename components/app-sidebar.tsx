@@ -44,12 +44,12 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "http://localhost:3000/dashboard",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
       title: "Locations",
-      url: "http://localhost:8080/dashboard/my-loc",
+      url: "/dashboard/my-loc",
       icon: IconListDetails,
     },
     {
@@ -130,19 +130,19 @@ const data = {
   ],
   ManageGuests: [
     {
-      name: "Guests Upcoming",
+      name: "Guests Today",
       url: "#",
-      icon: IconDatabase,
+      icon: IconFileWord,
     },
     {
-      name: "Guests History",
+      name: "Guests Upcoming",
       url: "#",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
+      name: "Guests History",
       url: "#",
-      icon: IconFileWord,
+      icon: IconDatabase,
     },
   ],
 }

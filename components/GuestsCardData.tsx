@@ -28,7 +28,7 @@ const GuestsCardData = ({
           </CardContent>
           <CardHeader className="text-primary-foreground w-full pt-6">
             <CardTitle>Upcoming Guests : </CardTitle>
-            {loc.price > 1 ? `${loc.price} Bookings` : `${loc.price} Booking`}
+            {loc.bookings! > 1 ? `${loc.bookings} Bookings` : `${loc.bookings} Booking`}
           </CardHeader>
         </div>
       </Card>

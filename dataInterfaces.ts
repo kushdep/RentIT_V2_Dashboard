@@ -177,4 +177,5 @@ export type PropertyCardDataType = {
   price: number;
   address: string;
   reviews: number;
+  bookings?: number;
 };

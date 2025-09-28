@@ -12,21 +12,15 @@ async function UpcomingGuestsPage({
 }) {
   const { slug } = await params;
 
-  console.log(slug);
   if (!slug) {
     redirect("/dashboard/guests/history");
   }
-  console.log(slug);
   const data = await getGuestsData();
-
-  console.log(data);
-
   if (!data.success) {
     return <>Something went wrong</>;
   }
 
   const { payload } = data;
-  console.log(payload);
 
   if (payload.length > 0) {
     const today = new Date().getTime();
@@ -41,29 +35,31 @@ async function UpcomingGuestsPage({
         console.log(loc.bookings);
       });
     } else if (slug[0] === "history") {
+      console.log("In history");
       payload.forEach((loc) => {
-        console.log(loc.bookings);
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.end).getTime();
           return bkngDate < today;
         });
       });
+      console.log("payload.bookings");
+      if (payload.bookings === undefined) {
+        payload.bookings = [];
+      }
     }
   }
 
   let bookingsData: any = [];
   if (slug.length === 2) {
     const id = slug[1];
-    console.log(id);
     bookingsData = payload.find((e: any) => {
-      console.log(e._id);
       const locID = String(e._id);
       return locID === id;
     });
-    console.log(bookingsData);
   }
 
   console.log(bookingsData);
+  console.log(payload);
 
   return (
     <>
@@ -74,7 +70,6 @@ async function UpcomingGuestsPage({
               <>No Data</>
             ) : (
               payload.map((e: any, i: number) => {
-                console.log(e);
                 const data: PropertyCardDataType = {
                   _id: e._id,
                   type: e.locType,
@@ -83,15 +78,15 @@ async function UpcomingGuestsPage({
                   price: e.bookings.length,
                   address: e.locDtl.location.address,
                   reviews: e.locDtl.reviews.length,
+                  bookings: e.bookings.length,
                 };
-                console.log(data);
                 return (
                   <GuestsCardData key={i} loc={data} gstType={"upcoming"} />
                 );
               })
             )
           ) : slug[0] === "history" ? (
-            payload.length === 0 ? (
+            payload.bookings.length === 0 ? (
               <>No Data</>
             ) : (
               payload.map((e: any, i: number) => {
@@ -103,8 +98,11 @@ async function UpcomingGuestsPage({
                   price: e.locDtl.price,
                   address: e.locDtl.location.address,
                   reviews: e.locDtl.reviews.length,
+                  bookings: e.locDtl.bookings,
                 };
-                return <GuestsCardData loc={data} gstType={"upcoming"} />;
+                return (
+                  <GuestsCardData key={i} loc={data} gstType={"history"} />
+                );
               })
             )
           ) : (
@@ -113,29 +111,27 @@ async function UpcomingGuestsPage({
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-x-8 gap-y-4 mx-4 my-4">
-          {slug.length === 2 &&
+          {slug.length === 2 && bookingsData.bookings.length === 0 ? (
             bookingsData.bookings.map((p: any, i: number) => {
-                console.log(p.bookingDetails)
-                console.log(p.bookingDetails.totalGuests)
-                console.log(p.bookingDetails.stayDuration)
-                console.log(bookingsData.locDtl.price)
-                const totalAmt = p.bookingDetails.payment.amount/100 
+              const totalAmt = p.bookingDetails.payment.amount / 100;
               const data = {
-                start:new Date(p.start).toDateString(),
-                end:new Date(p.end).toDateString(),
-                username:p.bookingDetails.user.username,
-                email:p.bookingDetails.user.email,
+                start: new Date(p.start).toDateString(),
+                end: new Date(p.end).toDateString(),
+                username: p.bookingDetails.user.username,
+                email: p.bookingDetails.user.email,
                 totalAmt,
-                totalGuests:p.bookingDetails.totalGuests,
-                stayDuration:p.bookingDetails.stayDuration
+                totalGuests: p.bookingDetails.totalGuests,
+                stayDuration: p.bookingDetails.stayDuration,
               };
-              console.log(data)
               if (slug[0] === "upcoming") {
                 return <UpcomingGuestData key={i} bkngData={data} />;
-              } else if (slug[0] === "upcoming") {
+              } else if (slug[0] === "history") {
                 return <GuestsDataTable key={i} bkngData={data} />;
               }
-            })}
+            })
+          ) : (
+            <h1>No data</h1>
+          )}
         </div>
       )}
     </>
