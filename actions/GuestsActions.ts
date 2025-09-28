@@ -2,10 +2,12 @@
 
 import { getCookieToken } from "@/controllers/authController";
 import Location from "../models/rent-loc";
-import User from "../models/user";
+import "@/models/booking"
+import "@/models/payment"
+import { AuthResponse, LocBookingType } from "@/dataInterfaces";
 
 
-export const getUpcomingGuests = async () => {
+export const getGuestsData = async ():Promise<AuthResponse> => {
   try {
     const decoded = await getCookieToken();
     if (decoded === undefined || decoded === null) {
@@ -17,10 +19,15 @@ export const getUpcomingGuests = async () => {
     let query:any ={}
     query["locDtl.author.email"]=decoded.email ;
     console.log(query)
-    const locDocBook = await Location.find(query).populate("bookings");
-    const locDoc = await Location.find(query).populate({path:"bookings",select:"user start end"});
-    console.log(locDocBook)
+    const locDoc = await Location.find(query).populate({path:"bookings.bookingDetails",populate:{path:'payment'}})
     console.log(locDoc)
+    const bookingData = locDoc.filter((e)=> e.bookings.length>0?true:false )
+    console.log(bookingData) 
+    return {
+      success: false,
+      message: "Something went wrong",
+      payload:bookingData
+    };
   } catch (error) {
     console.log("Error in getUpcomingGuests() " + error);
     return {

@@ -1,8 +1,9 @@
-import { ImgType, LOC_ENUM, LocPhtsType, RentLocIfc } from "@/dataInterfaces";
+import { LOC_ENUM, LocPhtsType, RentLocIfc } from "@/dataInterfaces";
 import mongoose, { Schema } from "mongoose";
 import Review from "./review";
 import User from "../models/user";
 import { dltUplImgArr } from "@/utils/server-utils/cloudinary";
+import { Types } from "mongoose";
 
 const locSchema: Schema<RentLocIfc> = new Schema(
   {
@@ -128,7 +129,7 @@ const locSchema: Schema<RentLocIfc> = new Schema(
       },
       reviews: [
         {
-          type: Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: "Review",
         },
       ],
@@ -137,10 +138,24 @@ const locSchema: Schema<RentLocIfc> = new Schema(
       type: Number,
       default: 0,
     },
-    bookings: {
-      type: Schema.Types.ObjectId,
-      ref: "Bookings",
-    },
+    bookings: [
+      {
+        start: {
+          type: String,
+          required: true,
+        },
+        end: {
+          type: String,
+          required: true,
+        },
+        bookingDetails: [
+          {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Bookings",
+          },
+        ],
+      },
+    ],
     stats: { type: Map, of: Object },
   },
   { timestamps: true }

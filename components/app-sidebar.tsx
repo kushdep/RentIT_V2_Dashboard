@@ -128,14 +128,14 @@ const data = {
       icon: IconSearch,
     },
   ],
-  documents: [
+  ManageGuests: [
     {
-      name: "Data Library",
+      name: "Guests Upcoming",
       url: "#",
       icon: IconDatabase,
     },
     {
-      name: "Reports",
+      name: "Guests History",
       url: "#",
       icon: IconReport,
     },
@@ -167,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavDocuments items={data.ManageGuests} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

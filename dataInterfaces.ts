@@ -81,24 +81,24 @@ export type LocDtlType = {
   reviews?: Types.ObjectId[];
 };
 
-export interface BookingStatsType{
-  totalRevenue:number,
-  totalBookings:number
+export interface BookingStatsType {
+  totalRevenue: number;
+  totalBookings: number;
 }
-export interface BookingPaymentType{
-  userId:string,
-  razorpay_payment_id:string,
-  razorpay_order_id:string,
-  amount:number
-  createdAt?:Date
+export interface BookingPaymentType {
+  userId: string;
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  amount: number;
+  createdAt?: Date;
 }
-export interface LocBookingType{
-  location:string,
-  user:LocAuthorType,
-  start:string,
-  end:string,
-  payment:BookingPaymentType,
-  checkIn:Date
+export interface LocBookingType {
+  location: string;
+  user: LocAuthorType;
+  start: string;
+  end: string;
+  payment: BookingPaymentType;
+  checkIn: Date;
 }
 
 export interface RentLocIfc {
@@ -107,16 +107,20 @@ export interface RentLocIfc {
   locType: LOC_ENUM | null;
   locDtl: LocDtlType;
   stars?: number | 0;
-  bookings?:LocBookingType[];
-  stats?:Map<string,BookingStatsType>;
+  bookings?: {
+    start: string;
+    end: string;
+    bookingDetails: LocBookingType[];
+  };
+  stats?: Map<string, BookingStatsType>;
 }
 
 export interface BookedTripsType {
-  location:string,
-  start:number,
-  end:number,
-  payment:string,
-  checkIn:boolean
+  location: string;
+  start: number;
+  end: number;
+  payment: string;
+  checkIn: boolean;
 }
 export interface IUserIfc {
   _id: Types.ObjectId;
@@ -141,7 +145,7 @@ export interface IUserIfc {
   userType: {
     propertier: boolean;
   };
-  trips:BookedTripsType[],
+  trips: BookedTripsType[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -164,7 +168,7 @@ export type JwtTokenVrfType = {
 };
 
 export type PropertyCardDataType = {
-  _id:string,
+  _id: string;
   type: string;
   title: string;
   image: string;

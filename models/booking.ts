@@ -1,8 +1,8 @@
 import { LocBookingType } from "@/dataInterfaces";
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const bookingSchema:Schema<LocBookingType> = new Schema({
-    location: Types.ObjectId,
+    location: mongoose.Schema.Types.ObjectId,
     user: {
         email: {
             type: String,
@@ -22,7 +22,7 @@ const bookingSchema:Schema<LocBookingType> = new Schema({
         required: true
     },
     payment: {
-        type: Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Payment",
     },
     checkIn: {
@@ -30,5 +30,5 @@ const bookingSchema:Schema<LocBookingType> = new Schema({
     }
 }, { timestamps: true })
 
-const Bookings = mongoose.model('Bookings', bookingSchema)
-export default Bookings
+export default mongoose.models.Bookings ||
+  mongoose.model<LocBookingType>("Bookings", bookingSchema);
