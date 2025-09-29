@@ -23,7 +23,9 @@ async function UpcomingGuestsPage({
   const { payload } = data;
 
   if (payload.length > 0) {
-    const today = new Date().getTime();
+    let todayDateObj = new Date();
+    todayDateObj.setHours(0, 0, 0, 0);
+    let today = todayDateObj.getTime();
     const nextDayDate = new Date(today + 24 * 60 * 60 * 1000).getTime();
     if (slug[0] === "upcoming") {
       payload.forEach((loc) => {
@@ -31,21 +33,18 @@ async function UpcomingGuestsPage({
           const bkngDate = new Date(e.start).getTime();
           return nextDayDate <= bkngDate;
         });
-        console.log("loc.bookings");
-        console.log(loc.bookings);
+        console.log("loc.bookings")
+        console.log(loc.bookings)
       });
     } else if (slug[0] === "history") {
       console.log("In history");
+      console.log(payload);
       payload.forEach((loc) => {
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.end).getTime();
-          return bkngDate < today;
+          return bkngDate <= today;
         });
       });
-      console.log("payload.bookings");
-      if (payload.bookings === undefined) {
-        payload.bookings = [];
-      }
     }
   }
 
@@ -58,13 +57,11 @@ async function UpcomingGuestsPage({
     });
   }
 
-  console.log(bookingsData);
-  console.log(payload);
 
   return (
     <>
       {slug.length === 1 ? (
-        <div className="grid grid-cols-3 gap-x-8 gap-y-4 mx-4 my-4 w-full">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-4 p-2 my-4 w-full">
           {slug[0] === "upcoming" ? (
             payload.length === 0 ? (
               <>No Data</>
@@ -86,7 +83,7 @@ async function UpcomingGuestsPage({
               })
             )
           ) : slug[0] === "history" ? (
-            payload.bookings.length === 0 ? (
+            payload.length === 0 ? (
               <>No Data</>
             ) : (
               payload.map((e: any, i: number) => {
@@ -109,10 +106,12 @@ async function UpcomingGuestsPage({
             <>NO Data to show</>
           )}
         </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-x-8 gap-y-4 mx-4 my-4">
-          {slug.length === 2 && bookingsData.bookings.length === 0 ? (
-            bookingsData.bookings.map((p: any, i: number) => {
+      ) : slug.length === 2 &&
+        bookingsData &&
+        bookingsData.bookings.length !== 0 ? (
+        slug[0] === "upcoming" ? (
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4 mx-4 my-4">
+            {bookingsData.bookings.map((p: any, i: number) => {
               const totalAmt = p.bookingDetails.payment.amount / 100;
               const data = {
                 start: new Date(p.start).toDateString(),
@@ -123,16 +122,16 @@ async function UpcomingGuestsPage({
                 totalGuests: p.bookingDetails.totalGuests,
                 stayDuration: p.bookingDetails.stayDuration,
               };
-              if (slug[0] === "upcoming") {
-                return <UpcomingGuestData key={i} bkngData={data} />;
-              } else if (slug[0] === "history") {
-                return <GuestsDataTable key={i} bkngData={data} />;
-              }
-            })
-          ) : (
-            <h1>No data</h1>
-          )}
-        </div>
+              return <UpcomingGuestData key={i} bkngData={data} />;
+            })}
+          </div>
+        ) : (
+          <div className="w-full">
+            <GuestsDataTable bkngData={bookingsData} />
+          </div>
+        )
+      ) : (
+        <h1>No data</h1>
       )}
     </>
   );

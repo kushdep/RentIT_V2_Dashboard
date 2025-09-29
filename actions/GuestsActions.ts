@@ -18,11 +18,8 @@ export const getGuestsData = async ():Promise<AuthResponse> => {
     }
     let query:any ={}
     query["locDtl.author.email"]=decoded.email ;
-    console.log(query)
     const locDoc = await Location.find(query).populate({path:"bookings.bookingDetails",populate:{path:'payment'}})
-    console.log(locDoc)
     const bookingData = locDoc.filter((e)=> e.bookings.length>0?true:false )
-    console.log(bookingData) 
     return {
       success: true,
       message: "Something went wrong",

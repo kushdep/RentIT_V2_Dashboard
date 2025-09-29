@@ -26,10 +26,14 @@ const GuestsCardData = ({
           <CardContent className="text-primary-foreground/80">
             {loc.address}
           </CardContent>
-          <CardHeader className="text-primary-foreground w-full pt-6">
-            <CardTitle>Upcoming Guests : </CardTitle>
-            {loc.bookings! > 1 ? `${loc.bookings} Bookings` : `${loc.bookings} Booking`}
-          </CardHeader>
+          {gstType === "upcoming" && (
+            <CardHeader className="text-primary-foreground w-full pt-6">
+              <CardTitle>Upcoming Guests : </CardTitle>
+              {loc.bookings! > 1
+                ? `${loc.bookings} Bookings`
+                : `${loc.bookings} Booking`}
+            </CardHeader>
+          )}
         </div>
       </Card>
     </Link>

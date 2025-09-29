@@ -7,6 +7,9 @@ async function ManageGuests({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
+   if (!slug) {
+    redirect("/dashboard/manage-guests/guests-today");
+  }
   const data = await getGuestsData();
   if (!data.success) {
     return <>Something went wrong</>;
@@ -33,9 +36,7 @@ async function ManageGuests({
     }
   }
 
-  if (!slug) {
-    redirect("/dashboard/manage-guests/guests-today");
-  }
+ 
   return <>
     {
         slug[0]==='manage-guests'
