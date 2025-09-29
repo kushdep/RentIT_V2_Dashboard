@@ -33,8 +33,8 @@ async function UpcomingGuestsPage({
           const bkngDate = new Date(e.start).getTime();
           return nextDayDate <= bkngDate;
         });
-        console.log("loc.bookings")
-        console.log(loc.bookings)
+        console.log("loc.bookings");
+        console.log(loc.bookings);
       });
     } else if (slug[0] === "history") {
       console.log("In history");
@@ -57,7 +57,6 @@ async function UpcomingGuestsPage({
     });
   }
 
-
   return (
     <>
       {slug.length === 1 ? (
@@ -78,7 +77,12 @@ async function UpcomingGuestsPage({
                   bookings: e.bookings.length,
                 };
                 return (
-                  <GuestsCardData key={i} loc={data} gstType={"upcoming"} />
+                  <GuestsCardData
+                    key={i}
+                    loc={data}
+                    gstType={"upcoming"}
+                    redtLink={"/dashboard/guests/upcoming/"}
+                  />
                 );
               })
             )
@@ -98,7 +102,12 @@ async function UpcomingGuestsPage({
                   bookings: e.locDtl.bookings,
                 };
                 return (
-                  <GuestsCardData key={i} loc={data} gstType={"history"} />
+                  <GuestsCardData
+                    key={i}
+                    loc={data}
+                    gstType={"history"}
+                    redtLink={"/dashboard/guests/history/"}
+                  />
                 );
               })
             )
