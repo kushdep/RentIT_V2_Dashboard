@@ -1,13 +1,11 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardDescription,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { UserCheckIcon } from "lucide-react";
+import CheckInButton from "./CheckInButton";
 
 const GuestsAvailData = ({
   gstData,
@@ -16,7 +14,6 @@ const GuestsAvailData = ({
   gstData: any;
   mgType: string;
 }) => {
-    console.log("gstData")
     console.log(gstData)
   return (
     <Card className="max-w-md p-3 shadow-xl">
@@ -63,12 +60,7 @@ const GuestsAvailData = ({
       </CardContent>
       <CardTitle className="text-center">{gstData.title}</CardTitle>
       {mgType === "check-in" &&(
-          <Button className="w-full bg-green-600/10 text-green-600 hover:bg-green-600/20 focus-visible:ring-green-600/20 dark:bg-green-400/10 dark:text-green-400 dark:hover:bg-green-400/20 dark:focus-visible:ring-green-400/40"
-          disabled = {Object.keys(gstData.guestsToday).length === 0}
-          >
-            <UserCheckIcon />
-            Check-In
-          </Button>
+          <CheckInButton id={gstData.guestsToday?.bookingId} isDisable={Object.keys(gstData.guestsToday).length===0}/>
       )}
     </Card>
   );

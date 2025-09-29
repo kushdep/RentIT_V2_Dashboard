@@ -3,7 +3,6 @@ import mongoose, { Schema } from "mongoose";
 import Review from "./review";
 import User from "../models/user";
 import { dltUplImgArr } from "@/utils/server-utils/cloudinary";
-import { Types } from "mongoose";
 
 const locSchema: Schema<RentLocIfc> = new Schema(
   {

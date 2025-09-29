@@ -75,27 +75,16 @@ const UserSchema: Schema<IUserIfc> = new Schema(
     },
     trips: [
       {
-        location: {
-          type: mongoose.Types.ObjectId,
-          ref: "Location",
-        },
-        start: {
-          type: Number,
-          required: true,
-        },
-        end: {
-          type: Number,
-          required: true,
-        },
-        payment: {
-          type: Schema.Types.ObjectId,
-          ref: "Payment",
-        },
-        checkIn: {
-          type: Boolean,
-          required: true,
-          default: false,
-        },
+       tripDetails:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Bookings',
+        required:true,
+       },
+       isRwd:{
+        type:Boolean,
+        default:false,
+        required:true
+       }
       },
     ],
   },

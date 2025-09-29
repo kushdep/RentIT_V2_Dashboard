@@ -76,7 +76,7 @@ async function ManageGuests({
                   price: e.bookings.length,
                   address: e.locDtl.location.address,
                   reviews: e.locDtl.reviews.length,
-                  guestsToday
+                  guestsToday:guestsToday
                 };
                 console.log(data)
                 return (
@@ -108,7 +108,7 @@ async function ManageGuests({
                   price: e.locDtl.price,
                   address: e.locDtl.location.address,
                   reviews: e.locDtl.reviews.length,
-                  guestsToday
+                  guestsToday:guestsToday
                 };
                 return (
                   <GuestsAvailData key={i} gstData={data} mgType={"guests-today"}/>
