@@ -21,14 +21,14 @@ async function ManageGuests({
   if (payload.length > 0) {
     const today = new Date(new Date().toISOString().slice(0, 10)).getTime();
     if (slug[0] === "guests-today") {
-      payload.forEach((loc) => {
+      payload.forEach((loc:any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.start).getTime();
           return today === bkngDate && loc.bookings.chechIn;
         });
       });
     } else if (slug[0] === "check-in") {
-      payload.forEach((loc) => {
+      payload.forEach((loc:any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.start).getTime();
           if(today === bkngDate){

@@ -28,7 +28,7 @@ async function UpcomingGuestsPage({
     let today = todayDateObj.getTime();
     const nextDayDate = new Date(today + 24 * 60 * 60 * 1000).getTime();
     if (slug[0] === "upcoming") {
-      payload.forEach((loc) => {
+      payload.forEach((loc:any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.start).getTime();
           return nextDayDate <= bkngDate;
@@ -39,7 +39,7 @@ async function UpcomingGuestsPage({
     } else if (slug[0] === "history") {
       console.log("In history");
       console.log(payload);
-      payload.forEach((loc) => {
+      payload.forEach((loc:any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
           const bkngDate = new Date(e.end).getTime();
           return bkngDate <= today;

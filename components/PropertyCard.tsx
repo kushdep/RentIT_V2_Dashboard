@@ -12,14 +12,25 @@ import {
   CardFooter,
   CardContent,
 } from "@/components/ui/card";
-import { PropertyCardDataType } from "@/dataInterfaces";
+import { AuthResponse, PropertyCardDataType } from "@/dataInterfaces";
 import ConfirmationDialog from "./modals/ConfirmationDialog";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { delLocationAction } from "@/actions/LocationAction";
+import toast from "react-hot-toast";
 
 const propertyCard = ({ loc }: { loc: PropertyCardDataType }) => {
   const router = useRouter();
+  async function delLoc() {
+    console.log("delete location");
+    const res: AuthResponse = await delLocationAction(loc._id);
+    console.log(res);
+    if (!res.success) {
+      toast.error(res.message);
+      return;
+    }
+    toast.success(res.message);
+  }
   return (
     <div className="relative max-w-md">
       <div className="relative h-50 w-full">
@@ -67,7 +78,16 @@ const propertyCard = ({ loc }: { loc: PropertyCardDataType }) => {
               Edit
             </Button>
           </Link>
-            <ConfirmationDialog id={loc._id}/>
+          <ConfirmationDialog
+            action={delLoc}
+            btnTtl="Are you absolutely sure you want to delete?"
+            btnDesc="This action cannot be undone. This will permanently delete Location"
+            btnLbl="Delete"
+            btnClss="bg-destructive dark:bg-destructive/60 hover:bg-destructive focus-visible:ring-destructive text-white"
+          >
+              <EditIcon />
+              Edit
+          </ConfirmationDialog>
         </CardFooter>
       </Card>
     </div>
