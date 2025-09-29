@@ -33,17 +33,19 @@ const GuestsAvailData = ({
                   <p className="font-bold">Stay Duration : {gstData.guestsToday.stayDuration}</p>
                 </div>
               </div>
-              {mgType === "guestsToday" && (
-                <div className="">
-                  <p className="font-black">Check-In Time : </p>
-                  <p className="font-medium"></p>
+                  <div className="">
+                  <p className="font-black">Stay Date : {gstData.guestsToday.stayDate}</p>
+                  </div>
+              {mgType === "guests-today" && (
+                  <div className="">
+                  <p className="">Check-In Time : {gstData.guestsToday.checkIn}</p>
                 </div>
               )}
-            </div>
+              </div>
           ) : (
             <div>
               <h1 className="">
-                {mgType === "guestsToday"
+                {mgType === "guests-today"
                   ? "NO GUESTS STAYING TODAY"
                   : "NO GUESTS TODAY"}
               </h1>
