@@ -41,7 +41,8 @@ export const getGuestsData = async (): Promise<AuthResponse> => {
 
 export const setCheckInTime = async (
   id: string,
-  checkIntime: Date
+  checkIntime: Date,
+  locId:string
 ): Promise<AuthResponse> => {
   try {
     if (id === undefined && id === null) {
@@ -50,6 +51,7 @@ export const setCheckInTime = async (
         message: "Booking id missing",
       };
     }
+
 
     const updBkngDoc = await Bookings.findByIdAndUpdate(
       { _id: id },
@@ -65,8 +67,8 @@ export const setCheckInTime = async (
 
     const { user } = updBkngDoc;
     const body = {
-      tripDetails: id,
-      isRwd: false,
+      booking:id,
+      locationDetails:locId,
     };
     const userDoc = await User.findOneAndUpdate(
       { email: user.email },

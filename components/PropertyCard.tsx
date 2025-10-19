@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EditIcon, Link2 } from "lucide-react";
+import { EditIcon, Link2,TrashIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -85,8 +85,8 @@ const propertyCard = ({ loc }: { loc: PropertyCardDataType }) => {
             btnLbl="Delete"
             btnClss="bg-destructive dark:bg-destructive/60 hover:bg-destructive focus-visible:ring-destructive text-white"
           >
-              <EditIcon />
-              Edit
+              <TrashIcon/>
+              Delete
           </ConfirmationDialog>
         </CardFooter>
       </Card>

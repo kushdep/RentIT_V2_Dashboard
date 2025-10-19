@@ -8,18 +8,21 @@ async function ManageGuests({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
+  console.log(slug)
   if (!slug) {
     redirect("/dashboard/manage-guests/guests-today");
   }
   const data = await getGuestsData();
+  console.log(data)
   if (!data.success) {
     return <>Something went wrong</>;
   }
 
   const { payload } = data;
+  console.log(payload)
 
   if (payload.length > 0) {
-    const today = new Date(new Date().toISOString().slice(0, 10)).getTime()+12*60*60;
+    const today = new Date(new Date().toISOString().slice(0, 10)).getTime()+12*60*60*1000;
     if (slug[0] === "guests-today") {
       payload.forEach((loc: any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
@@ -37,15 +40,16 @@ async function ManageGuests({
     } else if (slug[0] === "check-in") {
       payload.forEach((loc: any) => {
         loc.bookings = loc.bookings.filter((e: any) => {
-          const bkngStartDate = new Date(e.start).getTime();
-          const bkngEndDate = new Date(e.end).getTime()+12*60*60;
+          const bkngStartDate = new Date(e.start).getTime()+12*60*60*1000;
+          const bkngEndDate = new Date(e.end).getTime()+12*60*60*1000;
           const isBkngAvail = bkngStartDate <= today && today < bkngEndDate ? true : false;
           console.log(loc.locDtl.title)
-          console.log(bkngStartDate)
-          console.log(bkngEndDate)
-          console.log(today)
+          console.log(new Date(bkngStartDate))
+          console.log(new Date(bkngEndDate))
+          console.log(new Date(today))
           if (bkngStartDate <= today && today < bkngEndDate) {
             console.log("inside condition")
+
           }
           return (
             isBkngAvail &&

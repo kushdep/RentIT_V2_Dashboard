@@ -90,6 +90,8 @@ export interface BookingPaymentType {
   razorpay_payment_id: string;
   razorpay_order_id: string;
   amount: number;
+  receiptNo:number,
+  status:string,
   createdAt?: Date;
 }
 export interface LocBookingType {

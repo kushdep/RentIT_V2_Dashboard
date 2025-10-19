@@ -19,6 +19,15 @@ const PaymentSchema: Schema<BookingPaymentType> = new Schema(
         type:Number,
         required:true
     },
+     receiptNo: {
+        type: Number,
+        required: true
+    },
+    status:{
+        type: String,
+        enum:['SUCCESS','PENDING','FAILED'],
+        required: true
+    }
   },
   { timestamps: true }
 );

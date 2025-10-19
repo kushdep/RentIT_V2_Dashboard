@@ -75,16 +75,20 @@ const UserSchema: Schema<IUserIfc> = new Schema(
     },
     trips: [
       {
-       tripDetails:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Bookings',
-        required:true,
-       },
-       isRwd:{
-        type:Boolean,
-        default:false,
-        required:true
-       }
+        booking: {
+          type: mongoose.Types.ObjectId,
+          ref: "Bookings",
+          required:true
+        },
+        locationDetails: {
+          type: mongoose.Types.ObjectId,
+          ref: "Location",
+          required:true
+        },
+        review: {
+          type: mongoose.Types.ObjectId,
+          ref: "Review",
+        },
       },
     ],
   },

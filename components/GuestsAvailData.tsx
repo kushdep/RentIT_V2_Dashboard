@@ -62,7 +62,7 @@ const GuestsAvailData = ({
       </CardContent>
       <CardTitle className="text-center">{gstData.title}</CardTitle>
       {mgType === "check-in" &&(
-          <CheckInButton id={gstData.guestsToday?.bookingId} isDisable={Object.keys(gstData.guestsToday).length===0}/>
+          <CheckInButton id={gstData.guestsToday?.bookingId} locId={gstData._id}  isDisable={Object.keys(gstData.guestsToday).length===0}/>
       )}
     </Card>
   );

@@ -1,13 +1,12 @@
 "use client";
 
 import { UserCheckIcon } from "lucide-react";
-import { Button } from "./ui/button";
 import toast from "react-hot-toast";
 import { setCheckInTime } from "@/actions/GuestsActions";
 import { redirect } from "next/navigation";
 import ConfirmationDialog from "./modals/ConfirmationDialog";
 
-function CheckInButton({ id, isDisable }: { id: string; isDisable: boolean }) {
+function CheckInButton({ id, isDisable,locId }: { id: string; isDisable: boolean,locId:string;}) {
   async function handleCheckIn() {
     console.log(id);
     if (id === undefined || id === null) {
@@ -15,7 +14,7 @@ function CheckInButton({ id, isDisable }: { id: string; isDisable: boolean }) {
       return;
     }
     const checkIntime = new Date();
-    const res = await setCheckInTime(id, checkIntime);
+    const res = await setCheckInTime(id, checkIntime,locId);
     if (!res.success) {
       toast.error(res.message);
       return;

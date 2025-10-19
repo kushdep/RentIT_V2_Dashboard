@@ -11,6 +11,7 @@ const GuestsCardData = ({
   gstType: string;
   redtLink:string
 }) => {
+  console.log(loc)
   return (
     <Link href={`${redtLink}/${loc._id}`}>
       <Card className="before:bg-primary/70 relative max-w-md py-0 before:absolute before:size-full before:rounded-xl">
