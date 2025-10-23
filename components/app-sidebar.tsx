@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import {
+  IconBell,
   IconCamera,
-  IconChartBar,
   IconDashboard,
   IconDatabase,
   IconFileAi,
@@ -11,17 +11,14 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -54,13 +51,13 @@ const data = {
     },
     {
       title: "Add Location",
-      url: "http://localhost:8080/dashboard/add-loc",
+      url: "/dashboard/add-loc",
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Notifications",
+      url: "/dashboard/notifications",
+      icon: IconBell,
     },
   ],
   navClouds: [
@@ -131,17 +128,17 @@ const data = {
   ManageGuests: [
     {
       name: "Guests Today",
-      url: "#",
+      url: "/dashboard/manage-guests/guests-today",
       icon: IconFileWord,
     },
     {
       name: "Guests Upcoming",
-      url: "#",
+      url: "/dashboard/guests/upcoming",
       icon: IconReport,
     },
     {
       name: "Guests History",
-      url: "#",
+      url: "/dashboard/guests/history",
       icon: IconDatabase,
     },
   ],
@@ -168,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavDocuments items={data.ManageGuests} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <SessionProvider>

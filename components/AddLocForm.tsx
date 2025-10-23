@@ -1,4 +1,4 @@
-add"use client";
+"use client";
 
 import AddressLocInput from "@/components/AddressLocInput";
 import GoogleMapAddsInput from "@/components/GoogleMapAddsInput";
