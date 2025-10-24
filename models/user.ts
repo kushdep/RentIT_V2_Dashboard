@@ -73,17 +73,40 @@ const UserSchema: Schema<IUserIfc> = new Schema(
         },
       },
     },
+    notifications: [
+      {
+        ntfType: {
+          type: String,
+          enum: ["BKG", "RVW"],
+          required: true,
+        },
+        message: {
+          type: String,
+          required: true,
+        },
+        isVwd: {
+          type: Boolean,
+          default: false,
+          required: false,
+        },
+        timeStamp: {
+          type: Date,
+          default: Date.now,
+          required: false,
+        },
+      },
+    ],
     trips: [
       {
         booking: {
           type: mongoose.Types.ObjectId,
           ref: "Bookings",
-          required:true
+          required: true,
         },
         locationDetails: {
           type: mongoose.Types.ObjectId,
           ref: "Location",
-          required:true
+          required: true,
         },
         review: {
           type: mongoose.Types.ObjectId,

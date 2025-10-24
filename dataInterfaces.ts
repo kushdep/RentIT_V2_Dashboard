@@ -90,8 +90,8 @@ export interface BookingPaymentType {
   razorpay_payment_id: string;
   razorpay_order_id: string;
   amount: number;
-  receiptNo:number,
-  status:string,
+  receiptNo: number;
+  status: string;
   createdAt?: Date;
 }
 export interface LocBookingType {
@@ -149,10 +149,18 @@ export interface IUserIfc {
   userType: {
     propertier: boolean;
   };
+  notifications: NotificationType[];
   trips: BookedTripsType[];
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type NotificationType = {
+  ntfType: string;
+  message: string;
+  isVwd: Boolean;
+  timeStamp: Date;
+};
 
 export type AddressValDataType = {
   address: {

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { connectToDatabase } from "@/lib/mongoose";
 import  {Toaster} from 'react-hot-toast'
+import SocketProvider from "@/context/SocketProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,6 +42,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <SocketProvider/>
         <Toaster/>
         {children}
       </body>

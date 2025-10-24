@@ -178,7 +178,7 @@ export const getUserLocs = async (): Promise<AuthResponse> => {
     const { locations } = userDoc;
     console.log(locations);
     let payload: PropertyCardDataType[] = Object.entries(locations).flatMap(
-      ([key, val]: [string, unknown]) =>
+      ([key, val]: [string, any]) =>
         val.map((t: any) => ({
           _id: t._id,
           type: t.locType,
