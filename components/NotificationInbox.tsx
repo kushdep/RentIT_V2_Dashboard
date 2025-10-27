@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { IconMail } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { getNotification } from "@/actions/sidebarActions";
 function NotificationInbox() {
   const router = useRouter();
   const [noti, setNoti] = useState<number | null>(null);
+  const path = usePathname();
 
   useEffect(() => {
     function handleNoti(loc: any) {
@@ -47,6 +48,9 @@ function NotificationInbox() {
         className="size-8 flex group-data-[collapsible=icon]:opacity-0 "
         variant="outline"
         onClick={() => {
+          if(path.includes('/dashboard/notifications')){
+            return 
+          }
           router.push("/dashboard/notifications");
         }}
       >

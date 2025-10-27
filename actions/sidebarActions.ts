@@ -1,55 +1,37 @@
-'use server'
+"use server";
 
-import { NotificationType } from './../dataInterfaces';
+import { NotificationType } from "./../dataInterfaces";
 import { getCookieToken } from "@/controllers/authController";
 import { AuthResponse } from "@/dataInterfaces";
 import User from "../models/user";
 
-export async function getNotification (): Promise<AuthResponse> {
+export async function markNotiRead({noti}:{noti:string|string[]|[]}): Promise<AuthResponse> {
   try {
     const decoded = await getCookieToken();
-    console.log(decoded)
+    console.log(decoded);
     if (decoded === undefined || decoded === null) {
       return {
         success: false,
         message: "User token issue",
       };
     }
-    let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
-    const user = await User.findOne(query).lean();
-    if(!user){
+    let query: Record<string, any> = decoded._id ? { _id: decoded._id } : { email: decoded.email };
+    const userDoc = await User.findOne(query)
+    if(!userDoc){
       return {
-        success:false,
-        message:'UnAuthorized'
-      }
+        success: false,
+        message: "Marking Notification as read failed",
+      };
     }
-    console.log(user)
-    console.log(user.notifications)
-    let notiLen = 0
-    let bkg:NotificationType[]=[]
-    let rvw:NotificationType[]=[]
-  const notifications = user.notifications || [];
-    notifications.forEach((n:NotificationType) => {
-      if(!n.isVwd) notiLen++
-      switch (n.ntfType) {
-        case "BKG":
-          bkg.push(n)
-          break;
-          case "RVW":
-          rvw.push(n)
-          break;
-      }  
-    });
-    console.log(notiLen)
+    if(Array.isArray(noti)){
+      
+    }else{
+    }
+    query["new"] = true
 
     return {
       success: true,
-      message: "New Notification",
-      payload:{
-        bkgNoti:JSON.stringify(bkg),
-        rvwNOti:JSON.stringify(bkg),
-        notiLen
-      }
+      message: "Marking Notification As read",
     };
   } catch (error) {
     console.log("Error in getNotification" + error);
@@ -58,4 +40,47 @@ export async function getNotification (): Promise<AuthResponse> {
       message: "Error while getting Notifications",
     };
   }
-};
+}
+export async function getNotification(): Promise<AuthResponse> {
+  try {
+    const decoded = await getCookieToken();
+    console.log(decoded);
+    if (decoded === undefined || decoded === null) {
+      return {
+        success: false,
+        message: "User token issue",
+      };
+    }
+    let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
+    const user = await User.findOne(query).lean();
+    if (!user) {
+      return {
+        success: false,
+        message: "UnAuthorized",
+      };
+    }
+    let notiLen:number = 0;
+    const notifications:NotificationType[] = user.notifications || [];
+    notifications.forEach((n: NotificationType) => {
+      if (!n.isVwd) notiLen++;
+    });
+    console.log(notiLen);
+
+    return {
+      success: true,
+      message: "New Notification",
+      payload: {
+        notifications: JSON.stringify(notifications),
+        notiLen,
+      },
+    };
+  } catch (error) {
+    console.log("Error in getNotification" + error);
+    return {
+      success: false,
+      message: "Error while getting Notifications",
+    };
+  }
+}
+
+

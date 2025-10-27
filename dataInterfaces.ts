@@ -156,6 +156,7 @@ export interface IUserIfc {
 }
 
 export type NotificationType = {
+  _id:string,
   ntfType: string;
   message: string;
   isVwd: Boolean;
