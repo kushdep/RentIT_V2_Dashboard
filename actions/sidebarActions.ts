@@ -1,10 +1,11 @@
 'use server'
 
+import { NotificationType } from './../dataInterfaces';
 import { getCookieToken } from "@/controllers/authController";
 import { AuthResponse } from "@/dataInterfaces";
 import User from "../models/user";
 
-export const getNotification = async (): Promise<AuthResponse> => {
+export async function getNotification (): Promise<AuthResponse> {
   try {
     const decoded = await getCookieToken();
     console.log(decoded)
@@ -15,21 +16,40 @@ export const getNotification = async (): Promise<AuthResponse> => {
       };
     }
     let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
-    const user = await User.findOne(query);
+    const user = await User.findOne(query).lean();
+    if(!user){
+      return {
+        success:false,
+        message:'UnAuthorized'
+      }
+    }
     console.log(user)
     console.log(user.notifications)
-    if(!user){
-        return {
-            success:false,
-            message:'UnAuthorized'
-        }
-    }
-    const len = user.notifications.length
-    console.log(len)
+    let notiLen = 0
+    let bkg:NotificationType[]=[]
+    let rvw:NotificationType[]=[]
+  const notifications = user.notifications || [];
+    notifications.forEach((n:NotificationType) => {
+      if(!n.isVwd) notiLen++
+      switch (n.ntfType) {
+        case "BKG":
+          bkg.push(n)
+          break;
+          case "RVW":
+          rvw.push(n)
+          break;
+      }  
+    });
+    console.log(notiLen)
+
     return {
       success: true,
       message: "New Notification",
-      payload:len||0
+      payload:{
+        bkgNoti:JSON.stringify(bkg),
+        rvwNOti:JSON.stringify(bkg),
+        notiLen
+      }
     };
   } catch (error) {
     console.log("Error in getNotification" + error);

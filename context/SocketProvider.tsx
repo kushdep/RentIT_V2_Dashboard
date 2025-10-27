@@ -4,18 +4,20 @@ import socket from "@/lib/socket";
 
 function SocketProvider() {
   useEffect(() => {
+    console.log(socket);
+    console.log(socket.on);
+    console.log(socket.id);
+    socket.on("error", (error) => {
+      console.log(error);
+    });
     const onConnect = () => console.log("socket connected", socket.id);
     const onDisconnect = () => console.log("socket disconnected");
-    socket.on("connected", onConnect);
-    socket.on("disconnected", onDisconnect);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
 
-    return () => {
-      socket.off("connected", onConnect);
-      socket.off("disconnected", onDisconnect);
-    };
   }, []);
 
   return null;
 }
 
-export default SocketProvider
+export default SocketProvider;

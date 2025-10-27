@@ -5,8 +5,9 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-export default function DashLayout({children}:Readonly<{
+export default function DashLayout({children,modal}:Readonly<{
   children: React.ReactNode;
+  modal:React.ReactNode
 }>){
 
   return<SidebarProvider
@@ -21,6 +22,7 @@ export default function DashLayout({children}:Readonly<{
     <SidebarInset>
       <SiteHeader />
       {children}
+      {modal}
     </SidebarInset>
   </SidebarProvider>
   
