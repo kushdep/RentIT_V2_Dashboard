@@ -4,30 +4,60 @@ import { NotificationType } from "./../dataInterfaces";
 import { getCookieToken } from "@/controllers/authController";
 import { AuthResponse } from "@/dataInterfaces";
 import User from "../models/user";
+import user from "../models/user";
 
-export async function markNotiRead({noti}:{noti:string|string[]|[]}): Promise<AuthResponse> {
+export async function markNotiRead(
+  noti: string | string[] | []
+): Promise<AuthResponse> {
   try {
     const decoded = await getCookieToken();
-    console.log(decoded);
     if (decoded === undefined || decoded === null) {
       return {
         success: false,
         message: "User token issue",
       };
     }
-    let query: Record<string, any> = decoded._id ? { _id: decoded._id } : { email: decoded.email };
-    const userDoc = await User.findOne(query)
-    if(!userDoc){
-      return {
-        success: false,
-        message: "Marking Notification as read failed",
-      };
+    let query: Record<string, any> = decoded._id
+      ? { _id: decoded._id }
+      : { email: decoded.email };
+    if (Array.isArray(noti) && noti.length > 0) {
+      const userDoc = await User.findOne(query);
+      if (!userDoc) {
+        return {
+          success: false,
+          message: "Marking Notification as read failed",
+        };
+      }
+      userDoc.notifications.forEach((n: NotificationType) => {
+        if (noti.includes(n._id.toString())) {
+          n.isVwd = true;
+          console.log(n.message);
+        }
+      });
+
+      const updUserDoc = await userDoc.save();
+      if (!updUserDoc) {
+        return {
+          success: false,
+          message: "Marking Notification as read failed",
+        };
+      }
+    } else if (typeof noti === "string") {
+      console.log(noti)
+      const updDoc = await User.findOneAndUpdate(
+        query,
+        { $set: { "notifications.$[elem].isVwd": true } },
+        { arrayFilters: [{ "elem._id":noti }] }
+      );
+      console.log(updDoc);
+      if (!updDoc) {
+        return {
+          success: false,
+          message: "Marking Notification as read failed",
+        };
+      }
     }
-    if(Array.isArray(noti)){
-      
-    }else{
-    }
-    query["new"] = true
+    query["new"] = true;
 
     return {
       success: true,
@@ -59,8 +89,8 @@ export async function getNotification(): Promise<AuthResponse> {
         message: "UnAuthorized",
       };
     }
-    let notiLen:number = 0;
-    const notifications:NotificationType[] = user.notifications || [];
+    let notiLen: number = 0;
+    const notifications: NotificationType[] = user.notifications || [];
     notifications.forEach((n: NotificationType) => {
       if (!n.isVwd) notiLen++;
     });
@@ -82,5 +112,3 @@ export async function getNotification(): Promise<AuthResponse> {
     };
   }
 }
-
-

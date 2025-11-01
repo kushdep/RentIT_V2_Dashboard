@@ -11,7 +11,7 @@ function NotifModal() {
   const reference = useRef<HTMLDialogElement | null>(null);
   const router = useRouter();
   const [notiData, setNotiData] = useState([]);
-  const [markRead,setMarkRead] = useState<string[]|[]>([])
+  const [markRead,setMarkRead] = useState<string[]>([])
 
   async function getNoti() {
     try {
@@ -42,6 +42,8 @@ function NotifModal() {
   }, []);
 
   console.log(notiData);
+  console.log(markRead)
+
   return (
     <dialog
       ref={reference}
@@ -51,7 +53,7 @@ function NotifModal() {
           fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
           flex flex-col overflow-y-auto"
     >
-      <NotificationDataBox data={notiData} markingState={setMarkRead}/>
+      <NotificationDataBox data={notiData} markingState={setMarkRead} isModal={true} readData={markRead}/>
       <div className="flex justify-end gap-3 mt-4 sticky">
         <Button
           variant="default"

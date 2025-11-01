@@ -34,7 +34,7 @@ function NotificationPage() {
 
   return (
     <div className="w-full border h-full">
-      <NotificationDataBox data={notiData} />
+      <NotificationDataBox data={notiData} isModal={false} />
     </div>
   );
 }
