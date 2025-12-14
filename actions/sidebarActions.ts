@@ -4,7 +4,6 @@ import { NotificationType } from "./../dataInterfaces";
 import { getCookieToken } from "@/controllers/authController";
 import { AuthResponse } from "@/dataInterfaces";
 import User from "../models/user";
-import user from "../models/user";
 
 export async function markNotiRead(
   noti: string | string[] | []
@@ -43,11 +42,11 @@ export async function markNotiRead(
         };
       }
     } else if (typeof noti === "string") {
-      console.log(noti)
+      console.log(noti);
       const updDoc = await User.findOneAndUpdate(
         query,
         { $set: { "notifications.$[elem].isVwd": true } },
-        { arrayFilters: [{ "elem._id":noti }] }
+        { arrayFilters: [{ "elem._id": noti }] }
       );
       console.log(updDoc);
       if (!updDoc) {
@@ -57,7 +56,6 @@ export async function markNotiRead(
         };
       }
     }
-    query["new"] = true;
 
     return {
       success: true,
@@ -109,6 +107,37 @@ export async function getNotification(): Promise<AuthResponse> {
     return {
       success: false,
       message: "Error while getting Notifications",
+    };
+  }
+}
+
+export async function getUserDetails(): Promise<AuthResponse> {
+  try {
+    const decoded = await getCookieToken();
+    console.log(decoded);
+    if (decoded === undefined || decoded === null) {
+      return {
+        success: false,
+        message: "User token issue",
+      };
+    }
+    let query = decoded._id ? { _id: decoded._id } : { email: decoded.email };
+    const user = await User.findOne(query,{select:"username email url "}).lean();
+    if (!user) {
+      return {
+        success: false,
+        message: "UnAuthorized",
+      };
+    }
+    return {
+      success: true,
+      message: "User details",
+    };
+  } catch (error) {
+    console.log("Error in getUserDetails" + error);
+    return {
+      success: false,
+      message: "Error while getting user details",
     };
   }
 }

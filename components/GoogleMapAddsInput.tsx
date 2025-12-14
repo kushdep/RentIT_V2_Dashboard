@@ -59,13 +59,13 @@ function GoogleMapAddsInput() {
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100 dropdown-item"
                     onClick={() => {
                       handleInpVal({
-                        val: sug?.Fg?.Qh?.[0]?.[2]?.[0],
+                        val: sug?.Dg?.Ph?.[0]?.[2]?.[0],
                         index: i,
                       });
                       setIsDropdownOpen(false);
                     }}
                   >
-                    {sug?.Fg?.Qh?.[0]?.[2]?.[0] || "Unknown"}
+                    {sug?.Dg?.Ph?.[0]?.[2]?.[0] || "Unknown"}
                   </li>
                 );
               })}

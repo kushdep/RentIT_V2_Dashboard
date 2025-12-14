@@ -16,7 +16,7 @@ function NotificationDataBox({
   data: NotificationType[];
   markingState?: React.Dispatch<React.SetStateAction<string[]>>;
   isModal: boolean;
-  readData: string[];
+  readData?: string[];
 }) {
   const [ntfType, setNtfType] = useState("BKG");
   const router = useRouter();
@@ -62,7 +62,7 @@ function NotificationDataBox({
             if (d.isVwd) {
               isVwd = true;
             } else {
-              isVwd=readData?.length > 0 ? readData.includes(d._id) : false;
+              isVwd= readData && readData?.length > 0 ? readData.includes(d._id) : false;
             }
 
             return (

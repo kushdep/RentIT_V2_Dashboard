@@ -40,6 +40,7 @@ export function useGoogleAutoComp() {
                         sessionTokenRef.current!,
                         inpVal.val
                     );
+                    console.log(suggestions)
                     setSugg(suggestions);
                 } catch (error) {
                     console.error("Error while getting sugg()" + error);

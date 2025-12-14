@@ -28,8 +28,8 @@ const handler = NextAuth({
       }
 
       const userDoc = await User.findOne({ email: user.email });
-      if (!userDoc) {
-        return false;
+      if (!userDoc || !userDoc.userType.propertier) {
+        return ;
       }
       return true;
     },
